@@ -1,4 +1,7 @@
+
+
 // import React, { useState } from 'react';
+// import axios from 'axios';
 
 // const AddEvents = () => {
 //     const [formData, setFormData] = useState({
@@ -12,6 +15,9 @@
 //         committees: [],
 //         gallery: Array(6).fill('')
 //     });
+//     const [isSubmitting, setIsSubmitting] = useState(false);
+//     const [submitError, setSubmitError] = useState('');
+//     const [submitSuccess, setSubmitSuccess] = useState(false);
 
 //     const handleInputChange = (e) => {
 //         const { name, value } = e.target;
@@ -24,9 +30,15 @@
 //     const handleCommitteeChange = (index, field, value) => {
 //         const updatedCommittees = [...formData.committees];
 //         if (!updatedCommittees[index]) {
-//             updatedCommittees[index] = { name: '', awards: '' };
+//             updatedCommittees[index] = { name: '', awards: [] };
 //         }
-//         updatedCommittees[index][field] = value;
+        
+//         if (field === 'awards') {
+//             updatedCommittees[index][field] = value.split(',').map(award => award.trim());
+//         } else {
+//             updatedCommittees[index][field] = value;
+//         }
+        
 //         setFormData(prev => ({
 //             ...prev,
 //             committees: updatedCommittees
@@ -45,20 +57,74 @@
 //     const addCommittee = () => {
 //         setFormData(prev => ({
 //             ...prev,
-//             committees: [...prev.committees, { name: '', awards: '' }]
+//             committees: [...prev.committees, { name: '', awards: [] }]
 //         }));
 //     };
 
-//     const handleSubmit = (e) => {
+//     const handleSubmit = async (e) => {
 //         e.preventDefault();
-//         console.log('Form submitted:', formData);
-//         // Here you would typically send the data to your backend
+//         setIsSubmitting(true);
+//         setSubmitError('');
+//         setSubmitSuccess(false);
+
+//         try {
+//             // Prepare the data for submission
+//             const eventData = {
+//                 ...formData,
+//                 totalCommittees: Number(formData.totalCommittees),
+//                 totalDelegates: Number(formData.totalDelegates),
+//                 internationalDelegates: Number(formData.internationalDelegates),
+//                 gallery: formData.gallery.filter(url => url.trim() !== ''),
+//                 committees: formData.committees.map(committee => ({
+//                     name: committee.name,
+//                     awards: committee.awards || []
+//                 }))
+//             };
+
+//             // Send data to server
+//             const response = await axios.post('/events', eventData);
+            
+//             if (response.data.success) {
+//                 setSubmitSuccess(true);
+//                 // Reset form after successful submission
+//                 setFormData({
+//                     bannerUrl: '',
+//                     theme: '',
+//                     duration: '',
+//                     dates: '',
+//                     totalCommittees: 0,
+//                     totalDelegates: 0,
+//                     internationalDelegates: 0,
+//                     committees: [],
+//                     gallery: Array(6).fill('')
+//                 });
+//             } else {
+//                 setSubmitError(response.data.message || 'Failed to add event');
+//             }
+//         } catch (error) {
+//             console.error('Error submitting event:', error);
+//             setSubmitError(error.response?.data?.message || error.message || 'Failed to add event');
+//         } finally {
+//             setIsSubmitting(false);
+//         }
 //     };
 
 //     return (
 //         <div className="container mx-auto p-4">
 //             <h1 className="text-2xl font-bold mb-6">Add MUN Conference</h1>
             
+//             {submitSuccess && (
+//                 <div className="mb-4 p-4 bg-green-100 text-green-700 rounded">
+//                     Event added successfully!
+//                 </div>
+//             )}
+            
+//             {submitError && (
+//                 <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">
+//                     {submitError}
+//                 </div>
+//             )}
+
 //             <form onSubmit={handleSubmit} className="space-y-6">
 //                 {/* Banner URL */}
 //                 <div>
@@ -179,12 +245,13 @@
 //                                 />
 //                             </div>
 //                             <div>
-//                                 <label className="block text-sm font-medium text-gray-700">Award Winners (separate with commas)</label>
+//                                 <label className="block text-sm font-medium text-gray-700">Award Winners (comma separated)</label>
 //                                 <textarea
-//                                     value={committee.awards || ''}
+//                                     value={Array.isArray(committee.awards) ? committee.awards.join(', ') : ''}
 //                                     onChange={(e) => handleCommitteeChange(index, 'awards', e.target.value)}
 //                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
 //                                     rows="3"
+//                                     placeholder="Best Delegate, Outstanding Diplomacy, Honorable Mention"
 //                                 />
 //                             </div>
 //                         </div>
@@ -213,9 +280,10 @@
 //                 <div className="flex justify-end">
 //                     <button
 //                         type="submit"
-//                         className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+//                         className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:bg-gray-400"
+//                         disabled={isSubmitting}
 //                     >
-//                         Submit Conference
+//                         {isSubmitting ? 'Submitting...' : 'Submit Conference'}
 //                     </button>
 //                 </div>
 //             </form>
@@ -226,6 +294,7 @@
 // export default AddEvents;
 
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const AddEvents = () => {
     const [formData, setFormData] = useState({
@@ -238,6 +307,11 @@ const AddEvents = () => {
         internationalDelegates: 0,
         committees: [],
         gallery: Array(6).fill('')
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState({
+        success: false,
+        message: ''
     });
 
     const handleInputChange = (e) => {
@@ -254,9 +328,7 @@ const AddEvents = () => {
             updatedCommittees[index] = { name: '', awards: [] };
         }
         
-        // Handle awards differently if it's the awards field
         if (field === 'awards') {
-            // Split comma-separated awards into array
             updatedCommittees[index][field] = value.split(',').map(award => award.trim());
         } else {
             updatedCommittees[index][field] = value;
@@ -284,36 +356,80 @@ const AddEvents = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        // Prepare the data for output
-        const outputData = {
-            ...formData,
-            // Convert string numbers to actual numbers
-            totalCommittees: Number(formData.totalCommittees),
-            totalDelegates: Number(formData.totalDelegates),
-            internationalDelegates: Number(formData.internationalDelegates),
-            // Filter out empty gallery URLs
-            gallery: formData.gallery.filter(url => url.trim() !== ''),
-            // Process committees
-            committees: formData.committees.map(committee => ({
-                name: committee.name,
-                awards: committee.awards || [] // Ensure awards is always an array
-            }))
-        };
+        setIsSubmitting(true);
+        setSubmitStatus({ success: false, message: '' });
 
-        // Log the formatted JSON to console
-        console.log('Form Data:', JSON.stringify(outputData, null, 2));
-        
-        // Optional: Show alert with the JSON data
-        alert('Check console for the form data in JSON format!');
+        try {
+            // Prepare the data for submission
+            const eventData = {
+                ...formData,
+                totalCommittees: Number(formData.totalCommittees),
+                totalDelegates: Number(formData.totalDelegates),
+                internationalDelegates: Number(formData.internationalDelegates),
+                gallery: formData.gallery.filter(url => url.trim() !== ''),
+                committees: formData.committees.map(committee => ({
+                    name: committee.name,
+                    awards: committee.awards || []
+                }))
+            };
+
+            // Send data to server
+            const response = await axios.post('http://localhost:5000/events', eventData);
+            
+            if (response.data.success) {
+                setSubmitStatus({
+                    success: true,
+                    message: 'Event added successfully!'
+                });
+                // Reset form after successful submission
+                setFormData({
+                    bannerUrl: '',
+                    theme: '',
+                    duration: '',
+                    dates: '',
+                    totalCommittees: 0,
+                    totalDelegates: 0,
+                    internationalDelegates: 0,
+                    committees: [],
+                    gallery: Array(6).fill('')
+                });
+            } else {
+                setSubmitStatus({
+                    success: false,
+                    message: response.data.message || 'Failed to add event'
+                });
+            }
+        } catch (error) {
+            console.error('Error submitting event:', error);
+            const errorMessage = error.response?.data?.message || 
+                              error.message || 
+                              'Failed to connect to server';
+            setSubmitStatus({
+                success: false,
+                message: errorMessage
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-6">Add MUN Conference</h1>
             
+            {/* Status Message */}
+            {submitStatus.message && (
+                <div className={`mb-4 p-4 rounded ${
+                    submitStatus.success 
+                        ? 'bg-green-100 text-green-700' 
+                        : 'bg-red-100 text-red-700'
+                }`}>
+                    {submitStatus.message}
+                </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Banner URL */}
                 <div>
@@ -469,9 +585,14 @@ const AddEvents = () => {
                 <div className="flex justify-end">
                     <button
                         type="submit"
-                        className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                        className={`px-6 py-2 text-white rounded ${
+                            isSubmitting 
+                                ? 'bg-gray-500 cursor-not-allowed' 
+                                : 'bg-green-500 hover:bg-green-600'
+                        }`}
+                        disabled={isSubmitting}
                     >
-                        Submit Conference
+                        {isSubmitting ? 'Submitting...' : 'Submit Conference'}
                     </button>
                 </div>
             </form>
