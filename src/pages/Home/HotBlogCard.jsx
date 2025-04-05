@@ -111,3 +111,6 @@ const BlogCard = ({ job, blogData, setJobs }) => {
 
 export default BlogCard;
 
+
+
+

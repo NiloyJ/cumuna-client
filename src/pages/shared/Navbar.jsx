@@ -24,6 +24,7 @@ const Navbar = () => {
         {/* <li><NavLink to="/addpost" className="hover:text-blue-600">Add a post</NavLink></li> */}
         {user && <li><NavLink to="/addpost" className="hover:text-blue-600">Add a post</NavLink></li>}
         {user && <li><NavLink to="/addpresident" className="hover:text-blue-600">Add president</NavLink></li>}
+        {user && <li><NavLink to="/addevent" className="hover:text-blue-600">Add events</NavLink></li>}
         <li><NavLink to="/blogs" className="hover:text-blue-600">Blogs</NavLink></li>
         <li><NavLink to="/resources" className="hover:text-blue-600">Resources</NavLink></li>
     </>

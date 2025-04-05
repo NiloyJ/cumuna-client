@@ -12,6 +12,9 @@ import AddBlog from "../pages/AddBlog/AddBlog.jsx";
 import AllBlogs from "../pages/AllBlogs/AllBlogs.jsx";
 import UpdateBlog from "../pages/UpdateBlog/UpdateBlog.jsx";
 import AddPresident from "../pages/AddPresident/AddPresident.jsx";
+import FlagshipEvent from "../pages/FlagshipEvent/FlagshipEvent.jsx";
+import EventDetails from "../pages/FlagshipEvent/EventDetails.jsx";
+import AddEvents from "../pages/AddEvents/AddEvents.jsx";
 
 
 
@@ -56,7 +59,16 @@ const router = createBrowserRouter([
       },
       {
         path: "/addpresident",
-        element: <AddPresident></AddPresident>
+        element: <PrivateRoute><AddPresident></AddPresident></PrivateRoute>
+      },
+
+      {
+        path: "/conference",
+        element: <PrivateRoute><EventDetails></EventDetails></PrivateRoute>
+      },
+      {
+        path: "/addevent",
+        element: <PrivateRoute><AddEvents></AddEvents></PrivateRoute>
       },
 
       {
