@@ -11,6 +11,8 @@ import PrivateRoute from "./PrivateRoute.jsx";
 import AddBlog from "../pages/AddBlog/AddBlog.jsx";
 import AllBlogs from "../pages/AllBlogs/AllBlogs.jsx";
 import UpdateBlog from "../pages/UpdateBlog/UpdateBlog.jsx";
+import AddPresident from "../pages/AddPresident/AddPresident.jsx";
+
 
 
 const router = createBrowserRouter([
@@ -51,6 +53,10 @@ const router = createBrowserRouter([
         element: <UpdateBlog></UpdateBlog>,
         loader: ({params}) => fetch(`http://localhost:5000/blogs/${params._id}`)
 
+      },
+      {
+        path: "/addpresident",
+        element: <AddPresident></AddPresident>
       },
 
       {
