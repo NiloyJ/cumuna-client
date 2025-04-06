@@ -1,11 +1,10 @@
-
-
 import { div } from 'framer-motion/client';
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext/AuthContext';
 import Swal from 'sweetalert2';
 import AllBlogs from '../AllBlogs/AllBlogs';
+import { API_URL } from '../../config/config';
 
 const BlogCard = ({ job, blogData, setJobs }) => {
     const { title, thumbnailUrl, _id, author, category, content, tags = [] } = job;
@@ -24,7 +23,7 @@ const BlogCard = ({ job, blogData, setJobs }) => {
         }).then((result) => {
             if (result.isConfirmed) {
 
-                fetch(`http://localhost:5000/blogs/${_id}`, {
+                fetch(`${API_URL}/blogs/${_id}`, {
                     method: 'DELETE'
                 })
                     .then(res => res.json())

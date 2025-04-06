@@ -1,10 +1,9 @@
-
-
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext/AuthContext';
 import Swal from 'sweetalert2';
 import BlogCard from '../Home/HotBlogCard';
+import { API_URL } from '../../config/config';
 
 const AllBlogs = () => {
     const [blogs, setBlogs] = useState([]);
@@ -16,7 +15,7 @@ const AllBlogs = () => {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await fetch('http://localhost:5000/blogs');
+                const response = await fetch(`${API_URL}/blogs`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch blogs');
                 }
@@ -49,7 +48,7 @@ const AllBlogs = () => {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:5000/blogs/${id}`, {
+                const response = await fetch(`${API_URL}/blogs/${id}`, {
                     method: 'DELETE'
                 });
                 const data = await response.json();

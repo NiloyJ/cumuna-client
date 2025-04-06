@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import AuthContext from '../../context/AuthContext/AuthContext';
+import { API_URL } from '../../config/config';
 
 const ShowPresident = () => {
     const [presidents, setPresidents] = useState([]);
@@ -23,14 +24,23 @@ const ShowPresident = () => {
 
     const fetchPresidents = async () => {
         try {
-            const response = await fetch('http://localhost:5000/president');
+            const response = await fetch(`${API_URL}/president`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                credentials: 'omit' // This prevents sending cookies
+            });
+            
             if (!response.ok) {
-                throw new Error('Failed to fetch presidents');
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
             setPresidents(data);
         } catch (err) {
-            setError(err.message);
+            console.error('Error fetching presidents:', err);
+            setError(err.message || 'Failed to fetch presidents');
         } finally {
             setLoading(false);
         }
@@ -47,20 +57,24 @@ const ShowPresident = () => {
 
         setDeleting(true);
         try {
-            const response = await fetch(`http://localhost:5000/president/${id}`, {
+            const response = await fetch(`${API_URL}/president/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${user.token}`
-                }
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': user?.token ? `Bearer ${user.token}` : ''
+                },
+                credentials: 'omit'
             });
 
             if (!response.ok) {
-                throw new Error('Failed to delete president');
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             await fetchPresidents();
         } catch (err) {
-            setError(err.message);
+            console.error('Error deleting president:', err);
+            setError(err.message || 'Failed to delete president');
         } finally {
             setDeleting(false);
         }

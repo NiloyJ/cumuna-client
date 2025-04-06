@@ -15,6 +15,7 @@ import AddPresident from "../pages/AddPresident/AddPresident.jsx";
 import FlagshipEvent from "../pages/FlagshipEvent/FlagshipEvent.jsx";
 import EventDetails from "../pages/FlagshipEvent/EventDetails.jsx";
 import AddEvents from "../pages/AddEvents/AddEvents.jsx";
+import { API_URL } from '../config/config';
 
 
 
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
         path: '/blogs/:id',
         element: <Blogdetails></Blogdetails>,
         loader: async ({params}) => {
-          const response = await fetch(`http://localhost:5000/blogs/${params.id}`);
+          const response = await fetch(`${API_URL}/blogs/${params.id}`);
           if (!response.ok) {
             throw new Error('Blog not found');
           }
@@ -54,7 +55,7 @@ const router = createBrowserRouter([
       {
         path: '/updateBlog/:id',
         element: <UpdateBlog></UpdateBlog>,
-        loader: ({params}) => fetch(`http://localhost:5000/blogs/${params._id}`)
+        loader: ({params}) => fetch(`${API_URL}/blogs/${params._id}`)
 
       },
       {

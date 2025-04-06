@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_URL } from '../../config/config';
 
 const AddPresidentForm = () => {
   const [formData, setFormData] = useState({
@@ -16,9 +17,9 @@ const AddPresidentForm = () => {
 
   // Check for existing president on component mount
   useEffect(() => {
-    const checkExistingPresident = async () => {
+    const fetchPresidents = async () => {
       try {
-        const response = await fetch('http://localhost:5000/president');
+        const response = await fetch(`${API_URL}/president`);
         if (response.ok) {
           const data = await response.json();
           if (data.length > 0) {
@@ -32,7 +33,7 @@ const AddPresidentForm = () => {
       }
     };
 
-    checkExistingPresident();
+    fetchPresidents();
   }, []);
 
   const handleChange = e => {
@@ -59,7 +60,7 @@ const AddPresidentForm = () => {
     setSubmitStatus(null);
     
     try {
-      const response = await fetch('http://localhost:5000/president', {
+      const response = await fetch(`${API_URL}/president`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

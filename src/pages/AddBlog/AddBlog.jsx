@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useEditor, EditorContent, BubbleMenu } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -6,6 +5,7 @@ import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
 import Image from '@tiptap/extension-image';
 import Swal from 'sweetalert2';
+import { API_URL } from '../../config/config';
 
 const AddBlog = () => {
     const [title, setTitle] = useState('');
@@ -112,7 +112,7 @@ const AddBlog = () => {
             const formData = new FormData();
             formData.append('image', file);
             
-            const response = await fetch('http://localhost:5000/upload-image', {
+            const response = await fetch(`${API_URL}/upload-image`, {
                 method: 'POST',
                 body: formData
             });
@@ -202,7 +202,7 @@ const AddBlog = () => {
                 content: htmlContent
             };
 
-            const response = await fetch('http://localhost:5000/blogs/', {
+            const response = await fetch(`${API_URL}/blogs/`, {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json',
