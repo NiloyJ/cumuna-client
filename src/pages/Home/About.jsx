@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FaTrophy, FaUsers, FaCalendarAlt, FaHandshake } from 'react-icons/fa';
+import AuthContext from '../../context/AuthContext/AuthContext';
 
 const AboutSection = () => {
+  const { user, signOutUser } = useContext(AuthContext);
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -40,13 +42,13 @@ const AboutSection = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16 text-center">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <FaUsers className="text-4xl text-blue-600 mx-auto mb-3" />
-            <h4 className="text-2xl font-bold text-gray-800">1,500+</h4>
-            <p className="text-gray-600">Delegates Trained</p>
+            <h4 className="text-2xl font-bold text-gray-800">50+</h4>
+            <p className="text-gray-600">Delegates Trained Every year</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
             <FaCalendarAlt className="text-4xl text-blue-600 mx-auto mb-3" />
-            <h4 className="text-2xl font-bold text-gray-800">10+</h4>
-            <p className="text-gray-600">Conferences Hosted</p>
+            <h4 className="text-2xl font-bold text-gray-800">1</h4>
+            <p className="text-gray-600">Conferences every year</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
             <FaHandshake className="text-4xl text-blue-600 mx-auto mb-3" />
@@ -55,8 +57,8 @@ const AboutSection = () => {
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
             <FaTrophy className="text-4xl text-blue-600 mx-auto mb-3" />
-            <h4 className="text-2xl font-bold text-gray-800">5</h4>
-            <p className="text-gray-600">Awards Won</p>
+            <h4 className="text-2xl font-bold text-gray-800">20</h4>
+            <p className="text-gray-600">Awards each year on average</p>
           </div>
         </div>
 
@@ -68,3 +70,4 @@ const AboutSection = () => {
 };
 
 export default AboutSection;
+

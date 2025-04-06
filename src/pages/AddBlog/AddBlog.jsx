@@ -423,35 +423,7 @@ const AddBlog = () => {
                         )}
                     </div>
 
-                    {/* Tags */}
-                    {/* <div>
-                        <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
-                            Tags
-                        </label>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                            {tags.map((tag, index) => (
-                                <span key={index} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    {tag}
-                                    <button
-                                        type="button"
-                                        onClick={() => removeTag(index)}
-                                        className="ml-1.5 inline-flex text-blue-400 hover:text-blue-600 focus:outline-none"
-                                    >
-                                        ×
-                                    </button>
-                                </span>
-                            ))}
-                        </div>
-                        <input
-                            type="text"
-                            id="tags"
-                            value={tagInput}
-                            onChange={(e) => setTagInput(e.target.value)}
-                            onKeyDown={handleTagInput}
-                            placeholder="Type a tag and press Enter (e.g., MUN, UNHRC, Debate)"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div> */}
+                    
                 </div>
 
                 {/* Submit Button */}
@@ -470,4 +442,5 @@ const AddBlog = () => {
 };
 
 export default AddBlog;
+
 

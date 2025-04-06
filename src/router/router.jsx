@@ -64,7 +64,7 @@ const router = createBrowserRouter([
 
       {
         path: "/conference",
-        element: <PrivateRoute><EventDetails></EventDetails></PrivateRoute>
+        element: <EventDetails></EventDetails>
       },
       {
         path: "/addevent",

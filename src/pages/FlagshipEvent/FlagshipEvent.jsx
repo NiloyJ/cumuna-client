@@ -75,9 +75,9 @@ const FlagshipEvent = () => {
             <div className="conference-container flex flex-col items-center text-center relative z-10">
                 <div className="relative">
                     <h1 className="conference-title text-4xl md:text-5xl font-bold text-gray-800 mb-6 opacity-0 translate-y-[20px]">
-                        CUMUNA Conference {year}
+                        CUMUNA Conference
                     </h1>
-                    {user && (
+                    {/* {user && (
                         <div className="absolute right-0 top-0">
                             {!isEditing ? (
                                 <button 
@@ -114,7 +114,7 @@ const FlagshipEvent = () => {
                                 </div>
                             )}
                         </div>
-                    )}
+                    )} */}
                 </div>
                 
                 <p className="conference-subtitle text-lg md:text-xl text-gray-600 max-w-3xl mb-12 opacity-0 translate-y-[20px] delay-1">

@@ -1,458 +1,739 @@
-import { useContext, useState } from "react";
-import AuthContext from "../../context/AuthContext/AuthContext";
 
 
+// import { useEffect, useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import { Box, Button, Container, Typography, Alert, CircularProgress } from '@mui/material';
 
+// const EventDetails = () => {
+//   const [conferenceData, setConferenceData] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [deleteLoading, setDeleteLoading] = useState(false);
+//   const [deleteError, setDeleteError] = useState(null);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     fetchData();
+//   }, []);
+
+//   const fetchData = async () => {
+//     try {
+//       const response = await fetch('http://localhost:5000/events/');
+//       if (!response.ok) {
+//         throw new Error('Failed to fetch conference data');
+//       }
+//       const data = await response.json();
+//       setConferenceData(data[0]); // Assuming the API returns an array with one conference
+//     } catch (err) {
+//       setError(err.message);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleDelete = async () => {
+//     if (!conferenceData || !conferenceData._id) {
+//       setDeleteError('No conference data available to delete');
+//       return;
+//     }
+
+//     // Confirm deletion
+//     if (!window.confirm('Are you sure you want to delete this conference? This action cannot be undone.')) {
+//       return;
+//     }
+
+//     setDeleteLoading(true);
+//     setDeleteError(null);
+
+//     try {
+//       const response = await fetch(`http://localhost:5000/events/${conferenceData._id}`, {
+//         method: 'DELETE',
+//       });
+
+//       if (!response.ok) {
+//         throw new Error('Failed to delete conference');
+//       }
+
+//       // Redirect to home page or events list after successful deletion
+//       navigate('/');
+//     } catch (err) {
+//       setDeleteError(err.message);
+//     } finally {
+//       setDeleteLoading(false);
+//     }
+//   };
+
+//   if (loading) return (
+//     <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
+//       <CircularProgress />
+//     </Box>
+//   );
+  
+//   if (error) return (
+//     <Box p={3}>
+//       <Alert severity="error">Error: {error}</Alert>
+//     </Box>
+//   );
+  
+//   if (!conferenceData) return (
+//     <Box p={3}>
+//       <Alert severity="info">No conference data found</Alert>
+//     </Box>
+//   );
+
+//   return (
+//     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+//       {/* Hero Section with Banner */}
+//       <Box position="relative" sx={{ height: '400px' }}>
+//         <Box 
+//           sx={{ 
+//             position: 'absolute',
+//             top: 0,
+//             left: 0,
+//             right: 0,
+//             bottom: 0,
+//             bgcolor: 'rgba(0,0,0,0.5)',
+//             zIndex: 1
+//           }}
+//         />
+//         <Box
+//           component="img"
+//           src={conferenceData.bannerUrl}
+//           alt="Conference Banner"
+//           sx={{
+//             width: '100%',
+//             height: '100%',
+//             objectFit: 'cover'
+//           }}
+//         />
+//         <Box
+//           sx={{
+//             position: 'absolute',
+//             bottom: 0,
+//             left: 0,
+//             right: 0,
+//             bgcolor: 'rgba(0,0,0,0.7)',
+//             p: 3,
+//             zIndex: 2
+//           }}
+//         >
+//           <Container maxWidth="lg">
+//             <Typography variant="h3" color="white" gutterBottom>
+//               Model United Nations Conference
+//             </Typography>
+//             <Typography variant="h5" color="white">
+//               {conferenceData.theme}
+//             </Typography>
+//           </Container>
+//         </Box>
+//       </Box>
+
+//       {/* Conference Details */}
+//       <Container maxWidth="lg" sx={{ py: 6 }}>
+//         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 3, mb: 6 }}>
+//           <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1, textAlign: 'center' }}>
+//             <Typography variant="h4" color="primary" gutterBottom>
+//               {conferenceData.duration} days
+//             </Typography>
+//             <Typography variant="subtitle1">Duration</Typography>
+//             <Typography variant="body2" color="text.secondary">
+//               {conferenceData.dates}
+//             </Typography>
+//           </Box>
+
+//           <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1, textAlign: 'center' }}>
+//             <Typography variant="h4" color="primary" gutterBottom>
+//               {conferenceData.totalCommittees}
+//             </Typography>
+//             <Typography variant="subtitle1">Committees</Typography>
+//           </Box>
+
+//           <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1, textAlign: 'center' }}>
+//             <Typography variant="h4" color="primary" gutterBottom>
+//               {conferenceData.totalDelegates}
+//             </Typography>
+//             <Typography variant="subtitle1">Total Delegates</Typography>
+//             <Typography variant="body2" color="text.secondary">
+//               {conferenceData.internationalDelegates} International
+//             </Typography>
+//           </Box>
+//         </Box>
+
+//         {/* Theme Section */}
+//         <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1, mb: 6 }}>
+//           <Typography variant="h5" gutterBottom>
+//             Conference Theme
+//           </Typography>
+//           <Typography variant="body1">
+//             {conferenceData.theme}
+//           </Typography>
+//         </Box>
+
+//         {/* Gallery Section */}
+//         {conferenceData.gallery && conferenceData.gallery.length > 0 && (
+//           <Box sx={{ mb: 6 }}>
+//             <Typography variant="h5" gutterBottom>
+//               Gallery
+//             </Typography>
+//             <Box sx={{ 
+//               display: 'grid', 
+//               gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, 
+//               gap: 2 
+//             }}>
+//               {conferenceData.gallery.map((image, index) => (
+//                 <Box 
+//                   key={index} 
+//                   sx={{ 
+//                     position: 'relative',
+//                     height: '200px',
+//                     borderRadius: 1,
+//                     overflow: 'hidden',
+//                     '&:hover .overlay': {
+//                       opacity: 1
+//                     }
+//                   }}
+//                 >
+//                   <Box
+//                     component="img"
+//                     src={image}
+//                     alt={`Gallery ${index + 1}`}
+//                     sx={{
+//                       width: '100%',
+//                       height: '100%',
+//                       objectFit: 'cover'
+//                     }}
+//                   />
+//                   <Box
+//                     className="overlay"
+//                     sx={{
+//                       position: 'absolute',
+//                       top: 0,
+//                       left: 0,
+//                       right: 0,
+//                       bottom: 0,
+//                       bgcolor: 'rgba(0,0,0,0.5)',
+//                       display: 'flex',
+//                       alignItems: 'center',
+//                       justifyContent: 'center',
+//                       opacity: 0,
+//                       transition: 'opacity 0.3s'
+//                     }}
+//                   >
+//                     <Button variant="contained" color="primary">
+//                       View
+//                     </Button>
+//                   </Box>
+//                 </Box>
+//               ))}
+//             </Box>
+//           </Box>
+//         )}
+
+//         {/* Committees Section */}
+//         {conferenceData.committees && conferenceData.committees.length > 0 && (
+//           <Box sx={{ mb: 6 }}>
+//             <Typography variant="h5" gutterBottom>
+//               Committees
+//             </Typography>
+//             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+//               {conferenceData.committees.map((committee, index) => (
+//                 <Box 
+//                   key={index} 
+//                   sx={{ 
+//                     p: 2, 
+//                     bgcolor: 'background.paper', 
+//                     borderRadius: 1, 
+//                     boxShadow: 1 
+//                   }}
+//                 >
+//                   <Typography variant="h6">{committee.name}</Typography>
+//                   <Typography variant="body2">{committee.description}</Typography>
+//                 </Box>
+//               ))}
+//             </Box>
+//           </Box>
+//         )}
+
+//         {/* Sponsors Section */}
+//         {conferenceData.sponsorPhotos && conferenceData.sponsorPhotos.length > 0 && (
+//           <Box sx={{ mb: 6 }}>
+//             <Typography variant="h5" gutterBottom>
+//               Our Sponsors
+//             </Typography>
+//             <Box sx={{ 
+//               display: 'grid', 
+//               gridTemplateColumns: { 
+//                 xs: '1fr',
+//                 sm: 'repeat(2, 1fr)',
+//                 md: 'repeat(3, 1fr)',
+//                 lg: 'repeat(4, 1fr)'
+//               }, 
+//               gap: 3,
+//               p: 2,
+//               bgcolor: 'background.paper',
+//               borderRadius: 1,
+//               boxShadow: 1
+//             }}>
+//               {conferenceData.sponsorPhotos.map((photoUrl, index) => (
+//                 <Box
+//                   key={index}
+//                   sx={{
+//                     position: 'relative',
+//                     paddingTop: '56.25%', // 16:9 aspect ratio
+//                     borderRadius: 1,
+//                     overflow: 'hidden',
+//                     bgcolor: 'grey.100',
+//                     '&:hover': {
+//                       '& img': {
+//                         transform: 'scale(1.05)'
+//                       }
+//                     }
+//                   }}
+//                 >
+//                   <Box
+//                     component="img"
+//                     src={photoUrl}
+//                     alt={`Sponsor ${index + 1}`}
+//                     sx={{
+//                       position: 'absolute',
+//                       top: 0,
+//                       left: 0,
+//                       width: '100%',
+//                       height: '100%',
+//                       objectFit: 'contain',
+//                       transition: 'transform 0.3s ease-in-out'
+//                     }}
+//                   />
+//                 </Box>
+//               ))}
+//             </Box>
+//           </Box>
+//         )}
+
+//         {/* Delete Error */}
+//         {deleteError && (
+//           <Alert severity="error" sx={{ mb: 3 }}>
+//             {deleteError}
+//           </Alert>
+//         )}
+
+//         {/* Call to Action */}
+//         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 4 }}>
+//           <Button 
+//             variant="contained" 
+//             color="primary" 
+//             size="large"
+//           >
+//             Register Now
+//           </Button>
+//           <Button 
+//             variant="contained" 
+//             color="error" 
+//             size="large"
+//             onClick={handleDelete}
+//             disabled={deleteLoading}
+//           >
+//             {deleteLoading ? 'Deleting...' : 'Delete Conference'}
+//           </Button>
+//         </Box>
+//       </Container>
+//     </Box>
+//   );
+// };
+
+// export default EventDetails;
+
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button, Container, Typography, Alert, CircularProgress } from '@mui/material';
 
 const EventDetails = () => {
-    const { user } = useContext(AuthContext);
-    const [committees, setCommittees] = useState([
-      {
-        id: 1,
-        name: "UN Security Council",
-        topic: "Addressing the crisis in the South China Sea",
-        awards: [
-          { type: "Best Delegate", winner: "Maria Gonzalez", institution: "University of Mexico" },
-          { type: "Outstanding Diplomacy", winner: "John Smith", institution: "Harvard University" }
-        ]
-      },
-      {
-        id: 2,
-        name: "WHO",
-        topic: "Global pandemic response coordination",
-        awards: [
-          { type: "Best Delegate", winner: "James Wilson", institution: "University of Toronto" }
-        ]
+  const [conferenceData, setConferenceData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/events/');
+      if (!response.ok) {
+        throw new Error('Failed to fetch conference data');
       }
-    ]);
-    
-    const [conferenceData, setConferenceData] = useState({
-      year: "2022",
-      theme: "Bridging Global Divides",
-      description: "Our 2022 theme challenged delegates to find common ground in an increasingly polarized world.",
-      days: "3",
-      dateRange: "November 18-20, 2022",
-      totalCommittees: "28",
-      totalDelegates: "1,450",
-      delegateDescription: "From 85 countries across 6 continents",
-      bannerImage: "https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-      galleryImages: [
-        "https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-      ]
-    });
-  
-    const addCommittee = () => {
-      const newId = committees.length > 0 ? Math.max(...committees.map(c => c.id)) + 1 : 1;
-      setCommittees([
-        ...committees,
-        {
-          id: newId,
-          name: "New Committee",
-          topic: "Committee topic",
-          awards: [{ type: "Best Delegate", winner: "", institution: "" }]
-        }
-      ]);
-    };
-  
-    const updateCommittee = (id, field, value) => {
-      setCommittees(committees.map(committee => 
-        committee.id === id ? { ...committee, [field]: value } : committee
-      ));
-    };
-  
-    const updateAward = (committeeId, awardIndex, field, value) => {
-      setCommittees(committees.map(committee => {
-        if (committee.id === committeeId) {
-          const updatedAwards = [...committee.awards];
-          updatedAwards[awardIndex] = { ...updatedAwards[awardIndex], [field]: value };
-          return { ...committee, awards: updatedAwards };
-        }
-        return committee;
-      }));
-    };
-  
-    const addAward = (committeeId) => {
-      setCommittees(committees.map(committee => 
-        committee.id === committeeId 
-          ? { ...committee, awards: [...committee.awards, { type: "New Award", winner: "", institution: "" }] } 
-          : committee
-      ));
-    };
-  
-    const removeAward = (committeeId, awardIndex) => {
-      setCommittees(committees.map(committee => {
-        if (committee.id === committeeId) {
-          const updatedAwards = [...committee.awards];
-          updatedAwards.splice(awardIndex, 1);
-          return { ...committee, awards: updatedAwards };
-        }
-        return committee;
-      }));
-    };
-  
-    const updateConferenceData = (field, value) => {
-      setConferenceData({ ...conferenceData, [field]: value });
-    };
-  
-    const updateGalleryImage = (index, url) => {
-      const updatedImages = [...conferenceData.galleryImages];
-      updatedImages[index] = url;
-      setConferenceData({ ...conferenceData, galleryImages: updatedImages });
-    };
-  
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-        {/* Hero Section with Editable Banner */}
-        <header className="relative bg-blue-900 overflow-hidden h-96">
-          <div className="absolute inset-0 bg-black opacity-40"></div>
-          {user ? (
-            <div className="absolute inset-0 flex items-center justify-center z-10">
-              <input
-                type="text"
-                value={conferenceData.bannerImage}
-                onChange={(e) => updateConferenceData('bannerImage', e.target.value)}
-                className="bg-white bg-opacity-90 p-2 rounded w-3/4 text-center"
-                placeholder="Enter banner image URL"
-              />
-            </div>
-          ) : null}
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${conferenceData.bannerImage})` }}
-          ></div>
-          <div className="relative h-full flex flex-col items-center justify-center text-center px-4">
-            <span className="inline-block bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium mb-4">
-              {user ? (
-                <input
-                  type="text"
-                  value={`${conferenceData.year} Conference Archive`}
-                  onChange={(e) => updateConferenceData('year', e.target.value.replace(' Conference Archive', ''))}
-                  className="bg-transparent border-b border-white text-center w-full"
-                />
-              ) : (
-                `${conferenceData.year} Conference Archive`
-              )}
-            </span>
-            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl mb-4">
-              {user ? (
-                <input
-                  type="text"
-                  value={conferenceData.theme}
-                  onChange={(e) => updateConferenceData('theme', e.target.value)}
-                  className="bg-transparent border-b border-white text-center w-full text-4xl sm:text-5xl lg:text-6xl font-extrabold"
-                />
-              ) : (
-                conferenceData.theme
-              )}
-            </h1>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              {user ? (
-                <textarea
-                  value={conferenceData.description}
-                  onChange={(e) => updateConferenceData('description', e.target.value)}
-                  className="bg-transparent border-b border-blue-200 text-center w-full resize-none"
-                  rows="2"
-                />
-              ) : (
-                conferenceData.description
-              )}
-            </p>
-          </div>
-        </header>
-  
-        {/* Conference Highlights */}
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                {user ? (
-                  <input
-                    type="text"
-                    value={`${conferenceData.year} Conference Highlights`}
-                    onChange={(e) => {}}
-                    className="bg-transparent border-b border-blue-600 text-center mx-auto max-w-md"
-                  />
-                ) : (
-                  `${conferenceData.year} Conference Highlights`
-                )}
-              </h2>
-            </div>
-  
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
-                <div className="text-blue-600 font-bold text-2xl mb-2">
-                  {user ? (
-                    <input
-                      type="text"
-                      value={conferenceData.days}
-                      onChange={(e) => updateConferenceData('days', e.target.value)}
-                      className="bg-transparent border-b border-blue-600 w-8 text-center"
-                    />
-                  ) : (
-                    conferenceData.days
-                  )}
-                </div>
-                <h3 className="text-lg font-semibold text-gray-800">Days</h3>
-                <p className="text-gray-600 mt-2">
-                  {user ? (
-                    <input
-                      type="text"
-                      value={conferenceData.dateRange}
-                      onChange={(e) => updateConferenceData('dateRange', e.target.value)}
-                      className="bg-transparent border-b border-blue-200 w-full"
-                    />
-                  ) : (
-                    conferenceData.dateRange
-                  )}
-                </p>
-              </div>
-  
-              <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
-                <div className="text-blue-600 font-bold text-2xl mb-2">
-                  {user ? (
-                    <input
-                      type="text"
-                      value={conferenceData.totalCommittees}
-                      onChange={(e) => updateConferenceData('totalCommittees', e.target.value)}
-                      className="bg-transparent border-b border-blue-600 w-8 text-center"
-                    />
-                  ) : (
-                    conferenceData.totalCommittees
-                  )}
-                </div>
-                <h3 className="text-lg font-semibold text-gray-800">Committees</h3>
-                <p className="text-gray-600 mt-2">
-                  {user ? (
-                    <textarea
-                      value={conferenceData.delegateDescription}
-                      onChange={(e) => updateConferenceData('delegateDescription', e.target.value)}
-                      className="bg-transparent border-b border-blue-200 w-full resize-none"
-                    />
-                  ) : (
-                    conferenceData.delegateDescription
-                  )}
-                </p>
-              </div>
-  
-              <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
-                <div className="text-blue-600 font-bold text-2xl mb-2">
-                  {user ? (
-                    <input
-                      type="text"
-                      value={conferenceData.totalDelegates}
-                      onChange={(e) => updateConferenceData('totalDelegates', e.target.value)}
-                      className="bg-transparent border-b border-blue-600 w-16 text-center"
-                    />
-                  ) : (
-                    conferenceData.totalDelegates
-                  )}
-                </div>
-                <h3 className="text-lg font-semibold text-gray-800">Delegates</h3>
-                <p className="text-gray-600 mt-2">
-                  {user ? (
-                    <textarea
-                      value={conferenceData.delegateDescription}
-                      onChange={(e) => updateConferenceData('delegateDescription', e.target.value)}
-                      className="bg-transparent border-b border-blue-200 w-full resize-none"
-                    />
-                  ) : (
-                    conferenceData.delegateDescription
-                  )}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-  
-        {/* Committees Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                {user ? (
-                  <input
-                    type="text"
-                    value={`${conferenceData.year} Committees`}
-                    onChange={(e) => {}}
-                    className="bg-transparent border-b border-blue-600 text-left max-w-md"
-                  />
-                ) : (
-                  `${conferenceData.year} Committees`
-                )}
-              </h2>
-              {user && (
-                <button
-                  onClick={addCommittee}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
-                >
-                  Add Committee
-                </button>
-              )}
-            </div>
-  
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {committees.map((committee) => (
-                <div key={committee.id} className="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
-                  {user ? (
-                    <input
-                      type="text"
-                      value={committee.name}
-                      onChange={(e) => updateCommittee(committee.id, 'name', e.target.value)}
-                      className="text-xl font-bold text-gray-800 mb-2 w-full bg-gray-100 p-1 rounded"
-                    />
-                  ) : (
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">{committee.name}</h3>
-                  )}
-                  {user ? (
-                    <textarea
-                      value={committee.topic}
-                      onChange={(e) => updateCommittee(committee.id, 'topic', e.target.value)}
-                      className="text-gray-600 mb-4 w-full bg-gray-100 p-1 rounded resize-none"
-                      rows="2"
-                    />
-                  ) : (
-                    <p className="text-gray-600 mb-4">{committee.topic}</p>
-                  )}
-                  
-                  <div className="space-y-3">
-                    {committee.awards.map((award, awardIndex) => (
-                      <div key={awardIndex} className="bg-blue-50 p-3 rounded relative">
-                        {user && (
-                          <button
-                            onClick={() => removeAward(committee.id, awardIndex)}
-                            className="absolute top-1 right-1 text-red-500 hover:text-red-700"
-                          >
-                            ×
-                          </button>
-                        )}
-                        {user ? (
-                          <input
-                            type="text"
-                            value={award.type}
-                            onChange={(e) => updateAward(committee.id, awardIndex, 'type', e.target.value)}
-                            className="font-semibold text-blue-700 mb-1 w-full bg-blue-100 p-1 rounded"
-                          />
-                        ) : (
-                          <h4 className="font-semibold text-blue-700 mb-1">{award.type}</h4>
-                        )}
-                        {user ? (
-                          <input
-                            type="text"
-                            value={award.winner}
-                            onChange={(e) => updateAward(committee.id, awardIndex, 'winner', e.target.value)}
-                            className="text-gray-700 w-full bg-blue-100 p-1 rounded mb-1"
-                            placeholder="Winner name"
-                          />
-                        ) : (
-                          <p className="text-gray-700">{award.winner}</p>
-                        )}
-                        {user ? (
-                          <input
-                            type="text"
-                            value={award.institution}
-                            onChange={(e) => updateAward(committee.id, awardIndex, 'institution', e.target.value)}
-                            className="text-gray-700 w-full bg-blue-100 p-1 rounded"
-                            placeholder="Institution"
-                          />
-                        ) : (
-                          <p className="text-gray-500 text-sm">{award.institution}</p>
-                        )}
-                      </div>
-                    ))}
-                    {user && (
-                      <button
-                        onClick={() => addAward(committee.id)}
-                        className="text-blue-600 hover:text-blue-800 text-sm flex items-center"
-                      >
-                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                        Add Award
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-  
-        {/* Photo Gallery */}
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                {user ? (
-                  <input
-                    type="text"
-                    value={`${conferenceData.year} Conference Gallery`}
-                    onChange={(e) => {}}
-                    className="bg-transparent border-b border-blue-600 text-center mx-auto max-w-md"
-                  />
-                ) : (
-                  `${conferenceData.year} Conference Gallery`
-                )}
-              </h2>
-            </div>
-  
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {conferenceData.galleryImages.map((image, index) => (
-                <div key={index} className="h-48 overflow-hidden rounded-lg relative">
-                  {user && (
-                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                      <input
-                        type="text"
-                        value={image}
-                        onChange={(e) => updateGalleryImage(index, e.target.value)}
-                        className="bg-white bg-opacity-90 p-2 rounded w-4/5 text-center text-xs"
-                        placeholder="Enter image URL"
-                      />
-                    </div>
-                  )}
-                  <img 
-                    src={image} 
-                    alt={`Conference ${index + 1}`} 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-  
-        {/* Footer */}
-        <footer className="bg-gray-900 text-white py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p className="text-lg">
-              {user ? (
-                <input
-                  type="text"
-                  value={`Global Diplomacy Forum - Preparing Future Leaders Since ${conferenceData.year - 12}`}
-                  onChange={(e) => {}}
-                  className="bg-transparent border-b border-gray-600 text-center w-full max-w-2xl"
-                />
-              ) : (
-                `Global Diplomacy Forum - Preparing Future Leaders Since ${conferenceData.year - 12}`
-              )}
-            </p>
-            <p className="mt-4 text-gray-400">
-              {user ? (
-                <input
-                  type="text"
-                  value={`© ${conferenceData.year} Global Diplomacy Forum. All content and data from ${conferenceData.year - 1} conference.`}
-                  onChange={(e) => {}}
-                  className="bg-transparent border-b border-gray-600 text-center w-full max-w-2xl"
-                />
-              ) : (
-                `© ${conferenceData.year} Global Diplomacy Forum. All content and data from ${conferenceData.year - 1} conference.`
-              )}
-            </p>
-          </div>
-        </footer>
-      </div>
-    );
+      const data = await response.json();
+      setConferenceData(data[0]); // Assuming the API returns an array with one conference
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const handleDelete = async () => {
+    if (!conferenceData || !conferenceData._id) {
+      setDeleteError('No conference data available to delete');
+      return;
+    }
+
+    // Confirm deletion
+    if (!window.confirm('Are you sure you want to delete this conference? This action cannot be undone.')) {
+      return;
+    }
+
+    setDeleteLoading(true);
+    setDeleteError(null);
+
+    try {
+      const response = await fetch(`http://localhost:5000/events/${conferenceData._id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete conference');
+      }
+
+      // Redirect to home page or events list after successful deletion
+      navigate('/');
+    } catch (err) {
+      setDeleteError(err.message);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
+  if (loading) return (
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
+      <CircularProgress />
+    </Box>
+  );
+  
+  if (error) return (
+    <Box p={3}>
+      <Alert severity="error">Error: {error}</Alert>
+    </Box>
+  );
+  
+  if (!conferenceData) return (
+    <Box p={3}>
+      <Alert severity="info">No conference data found</Alert>
+    </Box>
+  );
+
+  return (
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+      {/* Hero Section with Banner */}
+      <Box position="relative" sx={{ height: '400px' }}>
+        <Box 
+          sx={{ 
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            bgcolor: 'rgba(0,0,0,0.5)',
+            zIndex: 1
+          }}
+        />
+        <Box
+          component="img"
+          src={conferenceData.bannerUrl}
+          alt="Conference Banner"
+          sx={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover'
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            bgcolor: 'rgba(0,0,0,0.7)',
+            p: 3,
+            zIndex: 2
+          }}
+        >
+          <Container maxWidth="lg">
+            <Typography variant="h3" color="white" gutterBottom>
+              Model United Nations Conference
+            </Typography>
+            <Typography variant="h5" color="white">
+              {conferenceData.theme}
+            </Typography>
+          </Container>
+        </Box>
+      </Box>
+
+      {/* Conference Details */}
+      <Container maxWidth="lg" sx={{ py: 6 }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 3, mb: 6 }}>
+          <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1, textAlign: 'center' }}>
+            <Typography variant="h4" color="primary" gutterBottom>
+              {conferenceData.duration} days
+            </Typography>
+            <Typography variant="subtitle1">Duration</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {conferenceData.dates}
+            </Typography>
+          </Box>
+
+          <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1, textAlign: 'center' }}>
+            <Typography variant="h4" color="primary" gutterBottom>
+              {conferenceData.totalCommittees}
+            </Typography>
+            <Typography variant="subtitle1">Committees</Typography>
+          </Box>
+
+          <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1, textAlign: 'center' }}>
+            <Typography variant="h4" color="primary" gutterBottom>
+              {conferenceData.totalDelegates}
+            </Typography>
+            <Typography variant="subtitle1">Total Delegates</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {conferenceData.internationalDelegates} International
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* Theme Section */}
+        <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1, mb: 6 }}>
+          <Typography variant="h5" gutterBottom>
+            Conference Theme
+          </Typography>
+          <Typography variant="body1">
+            {conferenceData.theme}
+          </Typography>
+        </Box>
+
+        {/* Gallery Section */}
+        {conferenceData.gallery && conferenceData.gallery.length > 0 && (
+          <Box sx={{ mb: 6 }}>
+            <Typography variant="h5" gutterBottom>
+              Gallery
+            </Typography>
+            <Box sx={{ 
+              display: 'grid', 
+              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, 
+              gap: 2 
+            }}>
+              {conferenceData.gallery.map((image, index) => (
+                <Box 
+                  key={index} 
+                  sx={{ 
+                    position: 'relative',
+                    height: '200px',
+                    borderRadius: 1,
+                    overflow: 'hidden',
+                    '&:hover .overlay': {
+                      opacity: 1
+                    }
+                  }}
+                >
+                  <Box
+                    component="img"
+                    src={image}
+                    alt={`Gallery ${index + 1}`}
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover'
+                    }}
+                  />
+                  <Box
+                    className="overlay"
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      bgcolor: 'rgba(0,0,0,0.5)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      opacity: 0,
+                      transition: 'opacity 0.3s'
+                    }}
+                  >
+                    <Button variant="contained" color="primary">
+                      View
+                    </Button>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        {/* Committees Section */}
+        {conferenceData.committees && conferenceData.committees.length > 0 && (
+          <Box sx={{ mb: 6 }}>
+            <Typography variant="h5" gutterBottom>
+              Committees
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {conferenceData.committees.map((committee, index) => (
+                <Box 
+                  key={index} 
+                  sx={{ 
+                    p: 3, 
+                    bgcolor: 'background.paper', 
+                    borderRadius: 1, 
+                    boxShadow: 1 
+                  }}
+                >
+                  <Typography variant="h6" color="primary" gutterBottom>
+                    {committee.name}
+                  </Typography>
+                  
+                  {committee.awards && committee.awards.length > 0 && (
+                    <Box sx={{ mt: 2 }}>
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        Awards:
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+                        {committee.awards.map((award, awardIndex) => (
+                          <Box 
+                            key={awardIndex}
+                            sx={{ 
+                              bgcolor: 'primary.light', 
+                              color: 'primary.contrastText',
+                              px: 2,
+                              py: 0.5,
+                              borderRadius: 1,
+                              fontSize: '0.875rem'
+                            }}
+                          >
+                            {award}
+                          </Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  )}
+                  
+                  {committee.winners && committee.winners.length > 0 && (
+                    <Box sx={{ mt: 2 }}>
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        Winners:
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+                        {committee.winners.map((winner, winnerIndex) => (
+                          <Box 
+                            key={winnerIndex}
+                            sx={{ 
+                              bgcolor: 'success.light', 
+                              color: 'success.contrastText',
+                              px: 2,
+                              py: 0.5,
+                              borderRadius: 1,
+                              fontSize: '0.875rem'
+                            }}
+                          >
+                            {winner}
+                          </Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  )}
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        {/* Sponsors Section */}
+        {conferenceData.sponsorPhotos && conferenceData.sponsorPhotos.length > 0 && (
+          <Box sx={{ mb: 6 }}>
+            <Typography variant="h5" gutterBottom>
+              Our Sponsors
+            </Typography>
+            <Box sx={{ 
+              display: 'grid', 
+              gridTemplateColumns: { 
+                xs: '1fr',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(3, 1fr)',
+                lg: 'repeat(4, 1fr)'
+              }, 
+              gap: 3,
+              p: 2,
+              bgcolor: 'background.paper',
+              borderRadius: 1,
+              boxShadow: 1
+            }}>
+              {conferenceData.sponsorPhotos.map((photoUrl, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    position: 'relative',
+                    paddingTop: '56.25%', // 16:9 aspect ratio
+                    borderRadius: 1,
+                    overflow: 'hidden',
+                    bgcolor: 'grey.100',
+                    '&:hover': {
+                      '& img': {
+                        transform: 'scale(1.05)'
+                      }
+                    }
+                  }}
+                >
+                  <Box
+                    component="img"
+                    src={photoUrl}
+                    alt={`Sponsor ${index + 1}`}
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'contain',
+                      transition: 'transform 0.3s ease-in-out'
+                    }}
+                  />
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        {/* Delete Error */}
+        {deleteError && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {deleteError}
+          </Alert>
+        )}
+
+        {/* Call to Action */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 4 }}>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            size="large"
+          >
+            Register Now
+          </Button>
+          <Button 
+            variant="contained" 
+            color="error" 
+            size="large"
+            onClick={handleDelete}
+            disabled={deleteLoading}
+          >
+            {deleteLoading ? 'Deleting...' : 'Delete Conference'}
+          </Button>
+        </Box>
+      </Container>
+    </Box>
+  );
+};
+
 export default EventDetails;
+
