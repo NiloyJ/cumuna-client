@@ -1,4 +1,5 @@
 
+
 // import React, { useState, useRef } from 'react';
 // import { useEditor, EditorContent, BubbleMenu } from '@tiptap/react';
 // import StarterKit from '@tiptap/starter-kit';
@@ -81,12 +82,24 @@
 //         // Style lists
 //         const uls = tempDiv.querySelectorAll('ul');
 //         uls.forEach(ul => {
-//             ul.classList.add('list-disc', 'pl-8', 'mb-4');
+//             ul.classList.add('list-disc', 'pl-8', 'mb-4', 'border-l-2', 'border-gray-200');
+            
+//             // Style list items
+//             const lis = ul.querySelectorAll('li');
+//             lis.forEach(li => {
+//                 li.classList.add('ml-4', 'py-1');
+//             });
 //         });
 
 //         const ols = tempDiv.querySelectorAll('ol');
 //         ols.forEach(ol => {
-//             ol.classList.add('list-decimal', 'pl-8', 'mb-4');
+//             ol.classList.add('list-decimal', 'pl-8', 'mb-4', 'border-l-2', 'border-gray-200');
+            
+//             // Style list items
+//             const lis = ol.querySelectorAll('li');
+//             lis.forEach(li => {
+//                 li.classList.add('ml-4', 'py-1');
+//             });
 //         });
 
 //         return tempDiv.innerHTML;
@@ -361,7 +374,7 @@
 //                                     <button
 //                                         type="button"
 //                                         onClick={() => editor.chain().focus().toggleBulletList().run()}
-//                                         className={`p-2 ${editor.isActive('bulletList') ? 'bg-gray-100' : ''}`}
+//                                         className={`p-2 ${editor.isActive('bulletList') ? 'bg-gray-100 font-bold text-blue-600' : ''}`}
 //                                     >
 //                                         •
 //                                     </button>
@@ -378,7 +391,7 @@
 //                                 </BubbleMenu>
 //                                 <EditorContent 
 //                                     editor={editor} 
-//                                     className="min-h-[50vh] p-4 focus:outline-none [&_h1]:text-5xl [&_h1]:font-extrabold [&_h1]:mb-6 [&_h1]:text-black [&_h2]:text-4xl [&_h2]:font-bold [&_h2]:mb-4 [&_h2]:text-black [&_h3]:text-3xl [&_h3]:font-bold [&_h3]:mb-3 [&_h3]:text-black"
+//                                     className="min-h-[50vh] p-4 focus:outline-none [&_h1]:text-5xl [&_h1]:font-extrabold [&_h1]:mb-6 [&_h1]:text-black [&_h2]:text-4xl [&_h2]:font-bold [&_h2]:mb-4 [&_h2]:text-black [&_h3]:text-3xl [&_h3]:font-bold [&_h3]:mb-3 [&_h3]:text-black [&_ul]:list-disc [&_ul]:pl-8 [&_ul]:mb-4 [&_li]:ml-4"
 //                                 />
 //                             </>
 //                         )}
@@ -486,6 +499,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
 import Image from '@tiptap/extension-image';
+import Link from '@tiptap/extension-link';
 import Swal from 'sweetalert2';
 import { API_URL } from '../../config/config';
 
@@ -516,6 +530,15 @@ const AddBlog = () => {
                 },
             }),
             Underline,
+            Link.configure({
+                openOnClick: false,
+                autolink: false,
+                HTMLAttributes: {
+                    class: 'text-blue-600 underline hover:text-blue-800',
+                    target: '_blank',
+                    rel: 'noopener noreferrer',
+                },
+            }),
             Image.configure({
                 inline: true,
                 allowBase64: true,
@@ -580,6 +603,15 @@ const AddBlog = () => {
             lis.forEach(li => {
                 li.classList.add('ml-4', 'py-1');
             });
+        });
+
+        // Style links
+        const links = tempDiv.querySelectorAll('a');
+        links.forEach(link => {
+            link.classList.add('text-blue-600', 'underline', 'hover:text-blue-800');
+            // Ensure links open in a new tab
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
         });
 
         return tempDiv.innerHTML;
@@ -858,6 +890,38 @@ const AddBlog = () => {
                                     >
                                         •
                                     </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            // Check if we're in a link
+                                            const isLink = editor.isActive('link');
+                                            
+                                            if (isLink) {
+                                                // If we're in a link, unlink it
+                                                editor.chain().focus().unsetLink().run();
+                                                return;
+                                            }
+                                            
+                                            // If we're not in a link, create a new one
+                                            const url = window.prompt('Enter URL:');
+                                            
+                                            // cancelled
+                                            if (url === null) {
+                                                return;
+                                            }
+                                            
+                                            // empty
+                                            if (url === '') {
+                                                return;
+                                            }
+                                            
+                                            // create link
+                                            editor.chain().focus().setLink({ href: url }).run();
+                                        }}
+                                        className={`p-2 ${editor.isActive('link') ? 'bg-gray-100 font-bold text-blue-600' : ''}`}
+                                    >
+                                        🔗
+                                    </button>
                                     <label className="p-2 hover:bg-gray-100 cursor-pointer">
                                         <input
                                             type="file"
@@ -871,7 +935,7 @@ const AddBlog = () => {
                                 </BubbleMenu>
                                 <EditorContent 
                                     editor={editor} 
-                                    className="min-h-[50vh] p-4 focus:outline-none [&_h1]:text-5xl [&_h1]:font-extrabold [&_h1]:mb-6 [&_h1]:text-black [&_h2]:text-4xl [&_h2]:font-bold [&_h2]:mb-4 [&_h2]:text-black [&_h3]:text-3xl [&_h3]:font-bold [&_h3]:mb-3 [&_h3]:text-black [&_ul]:list-disc [&_ul]:pl-8 [&_ul]:mb-4 [&_li]:ml-4"
+                                    className="min-h-[50vh] p-4 focus:outline-none [&_h1]:text-5xl [&_h1]:font-extrabold [&_h1]:mb-6 [&_h1]:text-black [&_h2]:text-4xl [&_h2]:font-bold [&_h2]:mb-4 [&_h2]:text-black [&_h3]:text-3xl [&_h3]:font-bold [&_h3]:mb-3 [&_h3]:text-black [&_ul]:list-disc [&_ul]:pl-8 [&_ul]:mb-4 [&_li]:ml-4 [&_a]:text-blue-600 [&_a]:underline [&_a]:hover:text-blue-800"
                                 />
                             </>
                         )}
