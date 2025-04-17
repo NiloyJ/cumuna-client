@@ -17,6 +17,7 @@ import EventDetails from "../pages/FlagshipEvent/EventDetails.jsx";
 import AddEvents from "../pages/AddEvents/AddEvents.jsx";
 import { API_URL } from '../config/config';
 import Resources from "../pages/Resources/Resources.jsx";
+import Team from "../pages/Team/Team.jsx";
 
 
 
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
       {
         path: "/resources",
         element: <Resources></Resources>
+      },
+      {
+        path: "/committee",
+        element: <Team></Team>
       },
 
       {

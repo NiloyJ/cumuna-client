@@ -20,7 +20,7 @@ const Navbar = () => {
     const links = <>
         <li><NavLink to="/about" className="hover:text-blue-600">About MUN</NavLink></li>
         <li><NavLink to="/conference" className="hover:text-blue-600">CUMUNA</NavLink></li>
-        <li><NavLink to="/committees" className="hover:text-blue-600">Committees</NavLink></li>
+        <li><NavLink to="/committee" className="hover:text-blue-600">Our Committee</NavLink></li>
         {/* <li><NavLink to="/addpost" className="hover:text-blue-600">Add a post</NavLink></li> */}
         {user && <li><NavLink to="/addpost" className="hover:text-blue-600">Add a post</NavLink></li>}
         {user && <li><NavLink to="/addpresident" className="hover:text-blue-600">Add president</NavLink></li>}
