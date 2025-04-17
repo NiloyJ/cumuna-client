@@ -18,6 +18,7 @@ import AddEvents from "../pages/AddEvents/AddEvents.jsx";
 import { API_URL } from '../config/config';
 import Resources from "../pages/Resources/Resources.jsx";
 import Team from "../pages/Team/Team.jsx";
+import ChangeBanner from "../pages/ChangeBanner/ChangeBanner.jsx";
 
 
 
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
       {
         path: "/committee",
         element: <Team></Team>
+      },
+      {
+        path: "/changebanner",
+        element: <PrivateRoute><ChangeBanner></ChangeBanner></PrivateRoute>
       },
 
       {

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { API_URL } from '../../config/config';
+import AuthContext from '../../context/AuthContext/AuthContext';
 
 const CommitteeManager = () => {
   const [committeeMembers, setCommitteeMembers] = useState([]);
@@ -12,6 +13,7 @@ const CommitteeManager = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useContext(AuthContext);
 
   // Fetch existing committee members
   useEffect(() => {
@@ -50,6 +52,7 @@ const CommitteeManager = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}` // Add authorization header
         },
         body: JSON.stringify({
           ...formData,
@@ -90,6 +93,9 @@ const CommitteeManager = () => {
     try {
       const response = await fetch(`${API_URL}/committee/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${user.token}` // Add authorization header
+        }
       });
 
       if (response.ok) {
@@ -115,7 +121,10 @@ const CommitteeManager = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center text-blue-800">Committee Management</h1>
+      {/* Only show management title if user is authenticated */}
+      {user && (
+        <h1 className="text-3xl font-bold mb-6 text-center text-blue-800">Committee Management</h1>
+      )}
       
       {status && (
         <div className={`mb-4 p-3 rounded text-center ${status.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
@@ -123,74 +132,81 @@ const CommitteeManager = () => {
         </div>
       )}
 
-      <div className="bg-white p-6 rounded-lg shadow-lg mb-8 border border-blue-100">
-        <h2 className="text-xl font-semibold mb-4 text-blue-700">Add New Committee Member</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Only show the form if user is authenticated */}
+      {user && (
+        <div className="bg-white p-6 rounded-lg shadow-lg mb-8 border border-blue-100">
+          <h2 className="text-xl font-semibold mb-4 text-blue-700">Add New Committee Member</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="name" className="block mb-1 font-medium text-gray-700">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="designation" className="block mb-1 font-medium text-gray-700">Designation</label>
+                <input
+                  type="text"
+                  id="designation"
+                  value={formData.designation}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+            </div>
+
             <div>
-              <label htmlFor="name" className="block mb-1 font-medium text-gray-700">Name</label>
+              <label htmlFor="awards" className="block mb-1 font-medium text-gray-700">Awards (comma separated)</label>
               <input
                 type="text"
-                id="name"
-                value={formData.name}
+                id="awards"
+                value={formData.awards}
                 onChange={handleChange}
                 className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
+                placeholder="Award 1, Award 2, Award 3"
               />
             </div>
 
             <div>
-              <label htmlFor="designation" className="block mb-1 font-medium text-gray-700">Designation</label>
+              <label htmlFor="imageUrl" className="block mb-1 font-medium text-gray-700">Image URL</label>
               <input
-                type="text"
-                id="designation"
-                value={formData.designation}
+                type="url"
+                id="imageUrl"
+                value={formData.imageUrl}
                 onChange={handleChange}
                 className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 required
+                placeholder="https://example.com/image.jpg"
               />
             </div>
-          </div>
 
-          <div>
-            <label htmlFor="awards" className="block mb-1 font-medium text-gray-700">Awards (comma separated)</label>
-            <input
-              type="text"
-              id="awards"
-              value={formData.awards}
-              onChange={handleChange}
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Award 1, Award 2, Award 3"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="imageUrl" className="block mb-1 font-medium text-gray-700">Image URL</label>
-            <input
-              type="url"
-              id="imageUrl"
-              value={formData.imageUrl}
-              onChange={handleChange}
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-              placeholder="https://example.com/image.jpg"
-            />
-          </div>
-
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition duration-300 shadow-md hover:shadow-lg"
-            >
-              {isSubmitting ? 'Adding...' : 'Add Member'}
-            </button>
-          </div>
-        </form>
-      </div>
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition duration-300 shadow-md hover:shadow-lg"
+              >
+                {isSubmitting ? 'Adding...' : 'Add Member'}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       <div>
-        <h2 className="text-2xl font-semibold mb-6 text-center text-blue-800">Current Committee Members</h2>
+        {/* Show different heading based on user role */}
+        <h2 className="text-2xl font-semibold mb-6 text-center text-blue-800">
+          {user ? 'Current Committee Members' : 'Our Team'}
+        </h2>
+        
         {committeeMembers.length === 0 ? (
           <div className="text-center py-8 bg-gray-50 rounded-lg">
             <p className="text-gray-500">No committee members found</p>
@@ -198,7 +214,6 @@ const CommitteeManager = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {committeeMembers.map((member, index) => {
-              // Different border colors based on index for variety
               const borderColors = [
                 'border-blue-500',
                 'border-green-500',
@@ -250,17 +265,20 @@ const CommitteeManager = () => {
                       </div>
                     )}
 
-                    <div className="mt-6 flex justify-center">
-                      <button
-                        onClick={() => handleDelete(member._id)}
-                        className="text-red-500 hover:text-red-700 font-medium text-sm flex items-center transition duration-300"
-                      >
-                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        Remove Member
-                      </button>
-                    </div>
+                    {/* Only show delete button if user is authenticated */}
+                    {user && (
+                      <div className="mt-6 flex justify-center">
+                        <button
+                          onClick={() => handleDelete(member._id)}
+                          className="text-red-500 hover:text-red-700 font-medium text-sm flex items-center transition duration-300"
+                        >
+                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                          Remove Member
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               );

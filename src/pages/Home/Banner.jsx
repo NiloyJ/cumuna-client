@@ -1,6 +1,8 @@
 import React from 'react';
+import AuthContext from '../../context/AuthContext/AuthContext';
 
 const HeroBanner = () => {
+  const {user} = useContext(AuthContext);
   return (
     <div className="relative w-full h-auto min-h-screen">
       {/* Background Image - Full height on mobile */}
