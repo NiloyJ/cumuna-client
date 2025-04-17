@@ -31,10 +31,18 @@ const ChangeBanner = () => {
         fetchBanner();
     }, []);
 
+    fetch(`${API_URL}/about_stats/banner`)
+    .then(async (res) => {
+        const text = await res.text(); // regardless of status
+        console.log("Raw response from server:", text);
+        return JSON.parse(text); // or safely check if it's JSON
+    })
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!bannerUrl) return;
-
+    
         try {
             const response = await fetch(`${API_URL}/about_stats/banner`, {
                 method: 'POST',
@@ -43,9 +51,17 @@ const ChangeBanner = () => {
                 },
                 body: JSON.stringify({ url: bannerUrl }),
             });
-
-            const result = await response.json();
-            
+    
+            const contentType = response.headers.get("content-type");
+            let result;
+    
+            if (contentType && contentType.includes("application/json")) {
+                result = await response.json();
+            } else {
+                const text = await response.text();
+                throw new Error(`Unexpected response format: ${text}`);
+            }
+    
             if (response.ok) {
                 setCurrentBanner(bannerUrl);
                 setBannerUrl('');
@@ -63,6 +79,7 @@ const ChangeBanner = () => {
             });
         }
     };
+    
 
     if (loading) {
         return <div className="text-center p-4">Loading banner information...</div>;
