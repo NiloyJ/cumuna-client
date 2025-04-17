@@ -15,6 +15,8 @@ const AddPresidentForm = () => {
   const [existingPresident, setExistingPresident] = useState(null);
   const [loadingExisting, setLoadingExisting] = useState(true);
 
+  console.log(API_URL, 'asd')
+
   // Check for existing president on component mount
   useEffect(() => {
     const fetchPresidents = async () => {
