@@ -16,6 +16,7 @@ import FlagshipEvent from "../pages/FlagshipEvent/FlagshipEvent.jsx";
 import EventDetails from "../pages/FlagshipEvent/EventDetails.jsx";
 import AddEvents from "../pages/AddEvents/AddEvents.jsx";
 import { API_URL } from '../config/config';
+import Resources from "../pages/Resources/Resources.jsx";
 
 
 
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
       {
         path: "/addevent",
         element: <PrivateRoute><AddEvents></AddEvents></PrivateRoute>
+      },
+      {
+        path: "/resources",
+        element: <Resources></Resources>
       },
 
       {
