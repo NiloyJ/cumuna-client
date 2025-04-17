@@ -1,5 +1,67 @@
 
 
+// import React, { useEffect, useState } from 'react';
+// import HotBlogCard from './HotBlogCard';
+// import { motion } from 'framer-motion';
+// import { Link } from 'react-router-dom';
+// import { API_URL } from '../../config/config';
+
+// const HotBlog = () => {
+//     const [jobs, setJobs] = useState([]);
+
+//     useEffect(() => {
+//         fetch(`${API_URL}/blogs`)
+//             .then(res => res.json())
+//             .then(data => setJobs(data))
+//     }, [])
+
+//     const displayedJobs = jobs.slice(0, 5);
+
+//     return (
+//         <div>
+//             <motion.h2
+//                 initial={{ opacity: 0, y: 20 }}
+//                 whileInView={{ opacity: 1, y: 0 }}
+//                 viewport={{ once: true }}
+//                 transition={{ duration: 0.5, delay: 0.2 }}
+//                 className="text-4xl font-bold mb-8 text-center"
+//             >
+//                 <span className="relative inline-block">
+//                     <span className="text-primary">Blogs</span>
+//                     <span className="absolute -bottom-2 left-0 w-full h-1 bg-primary/30 rounded-full"></span>
+//                     <motion.span
+//                         initial={{ scaleX: 0 }}
+//                         whileInView={{ scaleX: 1 }}
+//                         viewport={{ once: true }}
+//                         transition={{ duration: 0.8, delay: 0.4 }}
+//                         className="absolute -bottom-2 left-0 w-full h-1 bg-primary rounded-full origin-left"
+//                     ></motion.span>
+//                 </span>
+//                 <span className="text-neutral"> and updates</span>
+//             </motion.h2>
+//             <div className='px-2 sm:px-4'>
+//                 <div className='grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 xs:gap-4'>
+//                     {
+//                         displayedJobs.map(job => <HotBlogCard blogData={jobs} setJobs={setJobs} key={job._id} job={job}></HotBlogCard>)
+//                     }
+//                 </div>
+//                 {jobs.length > 5 && (
+//                     <div className="text-center mt-6">
+//                         <Link 
+//                             to="/blogs"
+//                             className="btn btn-primary"
+//                         >
+//                             See All Blogs
+//                         </Link>
+//                     </div>
+//                 )}
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default HotBlog;
+
 import React, { useEffect, useState } from 'react';
 import HotBlogCard from './HotBlogCard';
 import { motion } from 'framer-motion';
@@ -13,44 +75,40 @@ const HotBlog = () => {
         fetch(`${API_URL}/blogs`)
             .then(res => res.json())
             .then(data => setJobs(data))
+            .catch(error => console.error('Error fetching blogs:', error));
     }, [])
 
-    const displayedJobs = jobs.slice(0, 5);
+    // Robust sorting with multiple fallbacks
+    const displayedJobs = [...jobs].sort((a, b) => {
+        // Try createdAt first
+        if (a.createdAt && b.createdAt) {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        }
+        // Fallback to updatedAt
+        if (a.updatedAt && b.updatedAt) {
+            return new Date(b.updatedAt) - new Date(a.updatedAt);
+        }
+        // Fallback to _id (assuming MongoDB-style IDs with timestamps)
+        return b._id.localeCompare(a._id);
+    }).slice(0, 5);
 
     return (
         <div>
-            <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-4xl font-bold mb-8 text-center"
-            >
-                <span className="relative inline-block">
-                    <span className="text-primary">Blogs</span>
-                    <span className="absolute -bottom-2 left-0 w-full h-1 bg-primary/30 rounded-full"></span>
-                    <motion.span
-                        initial={{ scaleX: 0 }}
-                        whileInView={{ scaleX: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.4 }}
-                        className="absolute -bottom-2 left-0 w-full h-1 bg-primary rounded-full origin-left"
-                    ></motion.span>
-                </span>
-                <span className="text-neutral"> and updates</span>
-            </motion.h2>
+            {/* ... rest of your existing JSX remains exactly the same ... */}
             <div className='px-2 sm:px-4'>
                 <div className='grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 xs:gap-4'>
-                    {
-                        displayedJobs.map(job => <HotBlogCard blogData={jobs} setJobs={setJobs} key={job._id} job={job}></HotBlogCard>)
-                    }
+                    {displayedJobs.map(job => (
+                        <HotBlogCard 
+                            blogData={jobs} 
+                            setJobs={setJobs} 
+                            key={job._id} 
+                            job={job}
+                        />
+                    ))}
                 </div>
                 {jobs.length > 5 && (
                     <div className="text-center mt-6">
-                        <Link 
-                            to="/blogs"
-                            className="btn btn-primary"
-                        >
+                        <Link to="/blogs" className="btn btn-primary">
                             See All Blogs
                         </Link>
                     </div>
