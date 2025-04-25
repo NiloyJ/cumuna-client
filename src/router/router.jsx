@@ -19,6 +19,11 @@ import { API_URL } from '../config/config';
 import Resources from "../pages/Resources/Resources.jsx";
 import Team from "../pages/Team/Team.jsx";
 import ChangeBanner from "../pages/ChangeBanner/ChangeBanner.jsx";
+import Founders from "../pages/About/Founders.jsx";
+import Advisors from "../pages/About/Advisors.jsx";
+
+import Trustees from "../pages/About/Trustees.jsx";
+import PrevGovtBoard from "../pages/About/PrevGovtBoard.jsx";
 
 
 
@@ -80,7 +85,23 @@ const router = createBrowserRouter([
       },
       {
         path: "/committee",
-        element: <Team></Team>
+        element: <PrivateRoute><Team></Team></PrivateRoute>
+      },
+      {
+        path: "/about/founders",
+        element: <Founders></Founders>
+      },
+      {
+        path: "/about/advisors",
+        element: <Advisors></Advisors>
+      },
+      {
+        path: "about/trustees",
+        element: <Trustees></Trustees>
+      },
+      {
+        path: "about/previous-board",
+        element: <PrevGovtBoard></PrevGovtBoard>
       },
       {
         path: "/changebanner",
