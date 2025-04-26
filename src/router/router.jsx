@@ -106,7 +106,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "/annoucements",
+        path: "/announcements",
         element: <Announcement></Announcement>
       },
       {

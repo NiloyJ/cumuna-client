@@ -4,12 +4,13 @@ import HotEvents from './HotBlogs';
 import About from './About';
 import ShowPresident from '../ShowPresident/ShowPresident';
 import FlagshipEvent from '../FlagshipEvent/FlagshipEvent';
+import ShowAnnouncements from '../Announcement/ShowAnnouncements';
 const Home = () => {
 
     return (
         <div>
             <Banner></Banner>
-            <About></About> 
+            <ShowAnnouncements></ShowAnnouncements>
             <HotEvents></HotEvents>
             <ShowPresident></ShowPresident>
             <FlagshipEvent></FlagshipEvent>
