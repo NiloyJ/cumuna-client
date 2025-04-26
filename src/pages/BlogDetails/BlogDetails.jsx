@@ -36,7 +36,7 @@ const BlogDetails = () => {
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Blog Header with Banner */}
-            <div className="relative h-64 w-full overflow-hidden">
+            <div className="relative h-70 w-full overflow-hidden">
                 <img 
                     src={bannerUrl || 'https://via.placeholder.com/1600x400?text=Blog+Banner'} 
                     alt={title}
@@ -70,7 +70,7 @@ const BlogDetails = () => {
                             <img 
                                 src={thumbnailUrl} 
                                 alt={title} 
-                                className="w-full h-64 object-cover"
+                                className="w-full h-74 object-cover"
                                 onError={(e) => {
                                     e.target.onerror = null;
                                     e.target.src = 'https://via.placeholder.com/800x400?text=Thumbnail+Not+Found';

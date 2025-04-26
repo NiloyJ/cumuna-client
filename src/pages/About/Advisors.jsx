@@ -101,7 +101,7 @@ const Advisors = () => {
                                 {/* Right side: Information */}
                                 <div className="ml-6 flex-1 overflow-hidden">
                                     <h2 className="text-2xl font-bold text-gray-900 truncate">{advisor.name}</h2>
-                                    <div className="text-gray-600 font-medium truncate">
+                                    <div className="text-gray-600 font-medium truncate bg-primary text-white w-20 rounded-full mt-2 px-2 py-1 text-center">
                                         {advisor.designation?.replace(/_/g, ' ')}
                                     </div>
 

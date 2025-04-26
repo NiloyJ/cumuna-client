@@ -24,6 +24,7 @@ import Advisors from "../pages/About/Advisors.jsx";
 
 import Trustees from "../pages/About/Trustees.jsx";
 import PrevGovtBoard from "../pages/About/PrevGovtBoard.jsx";
+import Announcement from "../pages/Announcement/Announcement.jsx";
 
 
 
@@ -102,6 +103,11 @@ const router = createBrowserRouter([
       {
         path: "about/previous-board",
         element: <PrevGovtBoard></PrevGovtBoard>
+      },
+
+      {
+        path: "/annoucements",
+        element: <Announcement></Announcement>
       },
       {
         path: "/changebanner",
