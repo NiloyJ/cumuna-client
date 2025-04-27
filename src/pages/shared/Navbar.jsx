@@ -35,7 +35,7 @@ const Navbar = () => {
                 </details>
             </li>
 
-            {user && <li><NavLink to="/committee" className={`hover:text-blue-600 ${textSizes.base}`}>Manage committee</NavLink></li>}
+             <li><NavLink to="/committee" className={`hover:text-blue-600 ${textSizes.base}`}>committee</NavLink></li>
             {user && <li><NavLink to="/addpost" className={`hover:text-blue-600 ${textSizes.base}`}>Add a post</NavLink></li>}
             {user && <li><NavLink to="/addpresident" className={`hover:text-blue-600 ${textSizes.base}`}>Add president</NavLink></li>}
             {user && <li><NavLink to="/addevent" className={`hover:text-blue-600 ${textSizes.base}`}>Add events</NavLink></li>}
