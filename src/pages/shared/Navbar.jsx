@@ -39,10 +39,11 @@ const Navbar = () => {
             {user && <li><NavLink to="/addpost" className={`hover:text-blue-600 ${textSizes.base}`}>Add a post</NavLink></li>}
             {user && <li><NavLink to="/addpresident" className={`hover:text-blue-600 ${textSizes.base}`}>Add president</NavLink></li>}
             {user && <li><NavLink to="/addevent" className={`hover:text-blue-600 ${textSizes.base}`}>Add events</NavLink></li>}
-            {user && <li><NavLink to="/announcements" className={`hover:text-blue-600 ${textSizes.base}`}>Announcements</NavLink></li>}
+            <li><NavLink to="/announcements" className={`hover:text-blue-600 ${textSizes.base}`}>Announcements</NavLink></li>
             {user && <li><NavLink to="/changebanner" className={`hover:text-blue-600 ${textSizes.base}`}>Change Banner</NavLink></li>}
             <li><NavLink to="/blogs" className={`hover:text-blue-600 ${textSizes.base}`}>Blogs</NavLink></li>
-            <li><NavLink to="/resources" className={`hover:text-blue-600 ${textSizes.base}`}>Resources</NavLink></li>
+   
+            <li><NavLink to="/resources" className={`hover:text-blue-600 ${textSizes.base}`}>Study Guides</NavLink></li>
         </>
     );
 

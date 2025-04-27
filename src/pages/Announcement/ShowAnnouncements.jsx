@@ -1,5 +1,4 @@
 
-
 import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from '../../context/AuthContext/AuthContext';
 import { API_URL } from '../../config/config';
@@ -82,7 +81,7 @@ const ShowAnnouncements = () => {
 
     return (
         <div className="container mx-auto px-4 py-10">
-            <h2 className="text-4xl font-bold text-center mb-10">📢 Announcements</h2>
+            <h2 className="text-4xl font-bold text-center mb-10 text-gray-800">📢 Announcements</h2>
 
             {/* Slider Container */}
             <div className="relative mb-8">
@@ -94,21 +93,28 @@ const ShowAnnouncements = () => {
                         return (
                             <div 
                                 key={announcement._id} 
-                                className="bg-blue-700 text-white shadow-xl rounded-2xl p-6 flex flex-col h-full transition-opacity duration-500"
+                                className="bg-white shadow-xl rounded-2xl overflow-hidden flex flex-col h-full border border-gray-200 transition-opacity duration-500"
                             >
-                                <div className="flex-grow">
-                                    <h3 className="text-xl font-bold mb-2 text-center">{announcement.title}</h3>
-                                    <p className="mb-4">
+                                {/* Title with primary background */}
+                                <div className="bg-blue-700 px-6 py-4">
+                                    <h3 className="text-xl font-bold text-white text-center">{announcement.title}</h3>
+                                </div>
+                                
+                                {/* Message content with white background */}
+                                <div className="flex-grow p-6">
+                                    <p className="text-gray-800 mb-4">
                                         {displayText}
                                     </p>
                                 </div>
-                                <div className="flex justify-between items-center text-sm text-blue-100 mt-4">
-                                    <span>{new Date(announcement.createdAt).toLocaleString()}</span>
-                                    <div className="flex space-x-2">
+                                
+                                {/* Footer with actions */}
+                                <div className="flex justify-between items-center text-sm bg-gray-50 px-6 py-4 border-t border-gray-200">
+                                    <span className="text-gray-500">{new Date(announcement.createdAt).toLocaleString()}</span>
+                                    <div className="flex items-center space-x-2">
                                         {isTruncated && (
                                             <button
                                                 onClick={() => openModal(announcement)}
-                                                className="bg-white text-blue-700 font-semibold px-3 py-1 rounded-md hover:bg-blue-100 transition"
+                                                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1 rounded-md transition"
                                             >
                                                 Read More
                                             </button>
@@ -150,25 +156,24 @@ const ShowAnnouncements = () => {
             {/* Read More Modal */}
             {showModal && selectedAnnouncement && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    {/* <div className="bg-blue-700 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"> */}
-                    <div className='bg-gray-900 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto'>
+                    <div className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                         <div className="flex justify-between items-start mb-4">
-                            <h3 className="text-2xl font-bold text-white">{selectedAnnouncement.title}</h3>
+                            <h3 className="text-2xl font-bold text-gray-800">{selectedAnnouncement.title}</h3>
                             <button
                                 onClick={closeModal}
-                                className="text-white hover:text-blue-200 text-2xl"
+                                className="text-gray-500 hover:text-gray-700 text-2xl"
                             >
                                 &times;
                             </button>
                         </div>
-                        <div className="text-white whitespace-pre-line mb-6">
+                        <div className="text-gray-700 whitespace-pre-line mb-6">
                             {selectedAnnouncement.message}
                         </div>
-                        <div className="flex justify-between items-center text-sm text-blue-100">
+                        <div className="flex justify-between items-center text-sm text-gray-500 border-t pt-4">
                             <span>Posted on: {new Date(selectedAnnouncement.createdAt).toLocaleString()}</span>
                             <button
                                 onClick={closeModal}
-                                className="bg-blue-600 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-md"
+                                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold px-4 py-2 rounded-md"
                             >
                                 Close
                             </button>

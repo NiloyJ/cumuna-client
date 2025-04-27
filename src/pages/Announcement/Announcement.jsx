@@ -155,18 +155,22 @@ const Announcement = () => {
                     const { text: displayText, isTruncated } = truncateText(announcement.message, 100);
 
                     return (
-                        <div key={announcement._id} className="bg-blue-700 text-white shadow-xl rounded-2xl p-6 flex flex-col h-full">
-                            <div className="flex-grow">
-                                <h3 className="text-xl font-bold mb-2 text-center">{announcement.title}</h3>
-                                <p className="text-white mb-4">
+                        <div key={announcement._id} className="bg-white shadow-xl rounded-2xl overflow-hidden flex flex-col h-full border border-gray-200">
+                            {/* Title with primary background */}
+                            <div className="bg-blue-700 px-6 py-4">
+                                <h3 className="text-xl font-bold text-white text-center">{announcement.title}</h3>
+                            </div>
+                            
+                            {/* Message content with white background */}
+                            <div className="flex-grow p-6">
+                                <p className="text-gray-800 mb-4">
                                     {displayText}
-                                    {/* {isTruncated && (
-                                        <span className="text-blue-300 cursor-pointer" onClick={() => openModal(announcement)}> Read more</span>
-                                    )} */}
                                 </p>
                             </div>
-                            <div className="flex justify-between items-center text-sm text-blue-100 mt-4">
-                                <span>{new Date(announcement.createdAt).toLocaleString()}</span>
+                            
+                            {/* Footer with actions */}
+                            <div className="flex justify-between items-center text-sm bg-gray-50 px-6 py-4 border-t border-gray-200">
+                                <span className="text-gray-500">{new Date(announcement.createdAt).toLocaleString()}</span>
                                 <div className="flex items-center space-x-2">
                                     <button
                                         onClick={() => handleDelete(announcement._id)}
@@ -178,14 +182,13 @@ const Announcement = () => {
                                     {isTruncated && (
                                         <button
                                             onClick={() => openModal(announcement)}
-                                            className="bg-white text-blue-700 font-semibold px-4 py-2 rounded-md hover:bg-blue-100 transition"
+                                            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1 rounded-md transition"
                                         >
                                             Read More
                                         </button>
                                     )}
                                 </div>
                             </div>
-
                         </div>
                     );
                 })}
@@ -201,24 +204,24 @@ const Announcement = () => {
             {/* Read More Modal */}
             {showModal && selectedAnnouncement && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-gray-900 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                    <div className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                         <div className="flex justify-between items-start mb-4">
-                            <h3 className="text-2xl font-bold text-white">{selectedAnnouncement.title}</h3>
+                            <h3 className="text-2xl font-bold text-gray-800">{selectedAnnouncement.title}</h3>
                             <button
                                 onClick={closeModal}
-                                className="text-white hover:text-gray-300 text-2xl"
+                                className="text-gray-500 hover:text-gray-700 text-2xl"
                             >
                                 &times;
                             </button>
                         </div>
-                        <div className="text-white whitespace-pre-line mb-6">
+                        <div className="text-gray-700 whitespace-pre-line mb-6">
                             {selectedAnnouncement.message}
                         </div>
-                        <div className="flex justify-between items-center text-sm text-gray-400">
+                        <div className="flex justify-between items-center text-sm text-gray-500 border-t pt-4">
                             <span>Posted on: {new Date(selectedAnnouncement.createdAt).toLocaleString()}</span>
                             <button
                                 onClick={closeModal}
-                                className="bg-gray-700 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md"
+                                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold px-4 py-2 rounded-md"
                             >
                                 Close
                             </button>
