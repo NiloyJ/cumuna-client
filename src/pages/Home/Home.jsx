@@ -6,6 +6,8 @@ import ShowPresident from '../ShowPresident/ShowPresident';
 import FlagshipEvent from '../FlagshipEvent/FlagshipEvent';
 import ShowAnnouncements from '../Announcement/ShowAnnouncements';
 import ShowAdvisorMessage from '../ShowAdvisorMessage/ShowAdvisorMessage';
+import Events from '../Events/Events';
+import ShowEvents from '../Events/ShowEvents';
 const Home = () => {
 
     return (
@@ -14,8 +16,9 @@ const Home = () => {
             <ShowAdvisorMessage></ShowAdvisorMessage>
             <ShowAnnouncements></ShowAnnouncements>
             <HotEvents></HotEvents>
-            <ShowPresident></ShowPresident>
-            <FlagshipEvent></FlagshipEvent>
+            {/* <ShowPresident></ShowPresident> */}
+            {/* <FlagshipEvent></FlagshipEvent> */}
+            <ShowEvents></ShowEvents>
         </div>
     );
 };

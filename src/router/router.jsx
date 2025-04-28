@@ -25,6 +25,8 @@ import Advisors from "../pages/About/Advisors.jsx";
 import Trustees from "../pages/About/Trustees.jsx";
 import PrevGovtBoard from "../pages/About/PrevGovtBoard.jsx"
 import Announcement from "../pages/Announcement/Announcement.jsx";
+import Events from "../pages/Events/Events.jsx";
+import ExtraEventDetails from "../pages/ExtraEvenDetails/ExtraEventDetails.jsx";
 
 
 
@@ -67,6 +69,25 @@ const router = createBrowserRouter([
         loader: ({params}) => fetch(`${API_URL}/blogs/${params._id}`)
 
       },
+
+      {
+        path: '/extraevents',
+        element: <Events></Events>
+      },
+
+      {
+        path: '/extraevents/:id',  // ✅ plural
+        element: <ExtraEventDetails></ExtraEventDetails>,
+        loader: async ({ params }) => {
+          const response = await fetch(`${API_URL}/extraevents/${params.id}`);
+          if (!response.ok) {
+            throw new Error('Event not found');
+          }
+          return await response.json();
+        }
+      },
+
+
       {
         path: "/addpresident",
         element: <PrivateRoute><AddPresident></AddPresident></PrivateRoute>

@@ -21,28 +21,28 @@ const Navbar = () => {
 
     const links = (
         <>
-            {/* ABOUT US DROPDOWN - MOBILE */}
+            {/* MEET THE COMMITTEE DROPDOWN - MOBILE */}
             <li className="lg:hidden">
                 <details className={`${textSizes.base}`}>
-                    <summary className={`${textSizes.dropdown} font-semibold`}>About Us</summary>
+                    <summary className={`${textSizes.dropdown} font-semibold`}>Meet the Committee</summary>
                     <ul className="p-2 space-y-2">
                         <li><NavLink className={textSizes.dropdown} to="/about/advisors">Advisors</NavLink></li>
                         <li><NavLink className={textSizes.dropdown} to="/about/founders">Founders</NavLink></li>
                         <li><NavLink className={textSizes.dropdown} to="/about/trustees">Trustees</NavLink></li>
-                        <li><NavLink className={textSizes.dropdown} to="/about/previous-board">Previous Governing Board</NavLink></li>
+                        <li><NavLink className={textSizes.dropdown} to="/about/previous-board"> Governing Board</NavLink></li>
                         <li><NavLink className={textSizes.dropdown} to="/conference">CUMUN</NavLink></li>
                     </ul>
                 </details>
             </li>
 
-             <li><NavLink to="/committee" className={`hover:text-blue-600 ${textSizes.base}`}>committee</NavLink></li>
+            <li><NavLink to="/committee" className={`hover:text-blue-600 ${textSizes.base}`}>Committee</NavLink></li>
             {user && <li><NavLink to="/addpost" className={`hover:text-blue-600 ${textSizes.base}`}>Add a post</NavLink></li>}
             {user && <li><NavLink to="/addpresident" className={`hover:text-blue-600 ${textSizes.base}`}>Add president</NavLink></li>}
             {user && <li><NavLink to="/addevent" className={`hover:text-blue-600 ${textSizes.base}`}>Add events</NavLink></li>}
             <li><NavLink to="/announcements" className={`hover:text-blue-600 ${textSizes.base}`}>Announcements</NavLink></li>
             {user && <li><NavLink to="/changebanner" className={`hover:text-blue-600 ${textSizes.base}`}>Change Banner</NavLink></li>}
             <li><NavLink to="/blogs" className={`hover:text-blue-600 ${textSizes.base}`}>Blogs</NavLink></li>
-   
+            <li><NavLink to="/extraevents" className={`hover:text-blue-600 ${textSizes.base}`}>Events</NavLink></li>
             <li><NavLink to="/resources" className={`hover:text-blue-600 ${textSizes.base}`}>Study Guides</NavLink></li>
         </>
     );
@@ -81,10 +81,10 @@ const Navbar = () => {
                 {/* Desktop Navigation */}
                 <div className="hidden lg:flex">
                     <ul className="menu menu-horizontal gap-2 px-1">
-                        {/* ABOUT US DROPDOWN - DESKTOP */}
+                        {/* MEET THE COMMITTEE DROPDOWN - DESKTOP */}
                         <li tabIndex={0} className="dropdown dropdown-hover">
                             <div className={`hover:text-blue-600 cursor-pointer flex items-center gap-1 ${textSizes.base}`}>
-                                About Us
+                                Meet the Committee
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                                 </svg>
@@ -93,7 +93,7 @@ const Navbar = () => {
                                 <li><NavLink to="/about/advisors">Advisors</NavLink></li>
                                 <li><NavLink to="/about/founders">Founders</NavLink></li>
                                 <li><NavLink to="/about/trustees">Trustees</NavLink></li>
-                                <li><NavLink to="/about/previous-board">Previous Governing Board</NavLink></li>
+                                <li><NavLink to="/about/previous-board">Governing Board</NavLink></li>
                                 <li><NavLink to="/conference">CUMUN</NavLink></li>
                             </ul>
                         </li>
