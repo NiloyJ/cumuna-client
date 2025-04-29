@@ -77,44 +77,6 @@ const FlagshipEvent = () => {
                     <h1 className="conference-title text-4xl md:text-5xl font-bold text-gray-800 mb-6 opacity-0 translate-y-[20px]">
                         CUMUNA Conference
                     </h1>
-                    {/* {user && (
-                        <div className="absolute right-0 top-0">
-                            {!isEditing ? (
-                                <button 
-                                    onClick={handleEditClick}
-                                    className="btn btn-sm btn-ghost text-gray-500 hover:text-primary"
-                                    title="Edit Year"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                    </svg>
-                                </button>
-                            ) : (
-                                <div className="flex gap-2 bg-white p-2 rounded-lg shadow-md">
-                                    <input
-                                        type="text"
-                                        value={tempYear}
-                                        onChange={handleYearChange}
-                                        className="input input-sm input-bordered w-20 text-center"
-                                        maxLength="4"
-                                        pattern="\d{4}"
-                                    />
-                                    <button 
-                                        onClick={handleSaveClick}
-                                        className="btn btn-sm btn-primary"
-                                    >
-                                        Save
-                                    </button>
-                                    <button 
-                                        onClick={handleCancelClick}
-                                        className="btn btn-sm btn-ghost"
-                                    >
-                                        Cancel
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    )} */}
                 </div>
                 
                 <p className="conference-subtitle text-lg md:text-xl text-gray-600 max-w-3xl mb-12 opacity-0 translate-y-[20px] delay-1">

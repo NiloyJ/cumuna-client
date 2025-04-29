@@ -3,11 +3,12 @@ import Banner from './Banner';
 import HotEvents from './HotBlogs';
 import About from './About';
 import ShowPresident from '../ShowPresident/ShowPresident';
-import FlagshipEvent from '../FlagshipEvent/FlagshipEvent';
+
 import ShowAnnouncements from '../Announcement/ShowAnnouncements';
 import ShowAdvisorMessage from '../ShowAdvisorMessage/ShowAdvisorMessage';
 import Events from '../Events/Events';
 import ShowEvents from '../Events/ShowEvents';
+import FlagshipEvent from '../FlagshipEvent/FlagshipEvent';
 const Home = () => {
 
     return (
@@ -19,6 +20,7 @@ const Home = () => {
             {/* <ShowPresident></ShowPresident> */}
             {/* <FlagshipEvent></FlagshipEvent> */}
             <ShowEvents></ShowEvents>
+        
         </div>
     );
 };
