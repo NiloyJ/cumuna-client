@@ -36,7 +36,7 @@ const PrevGovtBoard = () => {
             {/* Header Section */}
             <div className="text-center mb-12">
                 <h1 className="text-4xl font-bold text-gray-900 mb-3">
-                    Previous Governing Board
+                     Governing Board
                 </h1>
                 <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                     Recognizing the contributions of our past leadership

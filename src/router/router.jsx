@@ -17,16 +17,16 @@ import EventDetails from "../pages/FlagshipEvent/EventDetails.jsx";
 import AddEvents from "../pages/AddEvents/AddEvents.jsx";
 import { API_URL } from '../config/config';
 import Resources from "../pages/Resources/Resources.jsx";
-import Team from "../pages/Team/Team.jsx";
 import ChangeBanner from "../pages/ChangeBanner/ChangeBanner.jsx";
 import Founders from "../pages/About/Founders.jsx";
 import Advisors from "../pages/About/Advisors.jsx";
-
+import Team from "../pages/Team/Team.jsx";
 import Trustees from "../pages/About/Trustees.jsx";
 import PrevGovtBoard from "../pages/About/PrevGovtBoard.jsx"
 import Announcement from "../pages/Announcement/Announcement.jsx";
 import Events from "../pages/Events/Events.jsx";
 import ExtraEventDetails from "../pages/ExtraEvenDetails/ExtraEventDetails.jsx";
+// import Committee from "../pages/Committee/Committee.jsx";
 
 
 

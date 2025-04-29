@@ -1,4 +1,5 @@
 
+
 import React, { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext/AuthContext';
@@ -14,13 +15,15 @@ const Navbar = () => {
 
     // Configurable text sizes
     const textSizes = {
-        base: 'text-lg',          // Base text size
-        dropdown: 'text-xl',      // Dropdown items size
-        mobileMenu: 'text-lg'     // Mobile menu size
+        base: 'text-lg',          
+        dropdown: 'text-xl',      
+        mobileMenu: 'text-lg'     
     };
 
     const links = (
         <>
+            <li><NavLink to="/" className={`hover:text-blue-600 ${textSizes.base}`}>Home</NavLink></li>
+
             {/* MEET THE COMMITTEE DROPDOWN - MOBILE */}
             <li className="lg:hidden">
                 <details className={`${textSizes.base}`}>
@@ -29,7 +32,7 @@ const Navbar = () => {
                         <li><NavLink className={textSizes.dropdown} to="/about/advisors">Advisors</NavLink></li>
                         <li><NavLink className={textSizes.dropdown} to="/about/founders">Founders</NavLink></li>
                         <li><NavLink className={textSizes.dropdown} to="/about/trustees">Trustees</NavLink></li>
-                        <li><NavLink className={textSizes.dropdown} to="/about/previous-board"> Governing Board</NavLink></li>
+                        <li><NavLink className={textSizes.dropdown} to="/about/previous-board">Governing Board</NavLink></li>
                         <li><NavLink className={textSizes.dropdown} to="/conference">CUMUN</NavLink></li>
                     </ul>
                 </details>
@@ -80,7 +83,9 @@ const Navbar = () => {
 
                 {/* Desktop Navigation */}
                 <div className="hidden lg:flex">
-                    <ul className="menu menu-horizontal gap-2 px-1">
+                    <ul className="menu menu-horizontal gap-2 px-1 items-center">
+                        <li><NavLink to="/" className={`hover:text-blue-600 ${textSizes.base}`}>Home</NavLink></li>
+
                         {/* MEET THE COMMITTEE DROPDOWN - DESKTOP */}
                         <li tabIndex={0} className="dropdown dropdown-hover">
                             <div className={`hover:text-blue-600 cursor-pointer flex items-center gap-1 ${textSizes.base}`}>
@@ -99,9 +104,16 @@ const Navbar = () => {
                         </li>
 
                         {/* Other navigation links */}
-                        {React.cloneElement(links, {
-                            className: `${textSizes.base}`
-                        })}
+                        <li><NavLink to="/committee" className={`hover:text-blue-600 ${textSizes.base}`}>Committee</NavLink></li>
+                        {user && <li><NavLink to="/addpost" className={`hover:text-blue-600 ${textSizes.base}`}>Add a post</NavLink></li>}
+                         <li><NavLink to="/about" className={`hover:text-blue-600 ${textSizes.base}`}>About</NavLink></li>
+                        {user && <li><NavLink to="/addpresident" className={`hover:text-blue-600 ${textSizes.base}`}>Add president</NavLink></li>}
+                        {user && <li><NavLink to="/addevent" className={`hover:text-blue-600 ${textSizes.base}`}>Add events</NavLink></li>}
+                        <li><NavLink to="/announcements" className={`hover:text-blue-600 ${textSizes.base}`}>Announcements</NavLink></li>
+                        {user && <li><NavLink to="/changebanner" className={`hover:text-blue-600 ${textSizes.base}`}>Change Banner</NavLink></li>}
+                        <li><NavLink to="/blogs" className={`hover:text-blue-600 ${textSizes.base}`}>Blogs</NavLink></li>
+                        <li><NavLink to="/extraevents" className={`hover:text-blue-600 ${textSizes.base}`}>Events</NavLink></li>
+                        <li><NavLink to="/resources" className={`hover:text-blue-600 ${textSizes.base}`}>Study Guides</NavLink></li>
                     </ul>
                 </div>
 
