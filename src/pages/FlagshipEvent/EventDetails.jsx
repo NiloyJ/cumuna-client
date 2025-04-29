@@ -1,14 +1,16 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { API_URL } from '../../config/config';
-import { 
-  Box, Button, Container, Typography, Alert, 
-  CircularProgress, Grid, Card, CardMedia, 
-  CardContent, Chip, Divider, Avatar
+import { format } from 'date-fns';
+import {
+  Box, Button, Container, Typography, Alert,
+  CircularProgress, Grid, Card, CardMedia,
+  CardContent, Chip, Avatar
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { CalendarToday, People, School, Business } from '@mui/icons-material';
+import { CalendarToday, School } from '@mui/icons-material';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   transition: 'transform 0.3s',
@@ -24,8 +26,6 @@ const EventDetails = () => {
   const [conferenceData, setConferenceData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-  const [deleteError, setDeleteError] = useState(null);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -35,11 +35,11 @@ const EventDetails = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        
+
         if (!data.success) {
           throw new Error(data.message || 'Event not found');
         }
-        
+
         setConferenceData(data.data);
       } catch (err) {
         setError(err.message);
@@ -47,7 +47,7 @@ const EventDetails = () => {
         setLoading(false);
       }
     };
-    
+
     fetchEvent();
   }, [id]);
 
@@ -87,38 +87,52 @@ const EventDetails = () => {
 
   return (
     <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
-      {/* Hero Banner */}
-      <Box sx={{ position: 'relative', height: { xs: '300px', md: '500px' } }}>
+      {/* Large Featured Image */}
+      <Box sx={{ mb: 6 }}>
         <CardMedia
           component="img"
           image={conferenceData.bannerUrl}
           alt={conferenceData.theme}
-          sx={{ height: '100%', width: '100%', objectFit: 'cover' }}
+          sx={{
+            width: '100%',
+            height: { xs: 250, md: 450 },
+            objectFit: 'cover',
+            borderRadius: 1,
+            boxShadow: 3
+          }}
         />
-        <Box sx={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          bgcolor: 'rgba(0,0,0,0.7)',
-          color: 'white',
-          p: 3,
-          textAlign: 'center'
-        }}>
-          <Container maxWidth="lg">
-            <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-              {conferenceData.theme}
-            </Typography>
-            <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
-              <CalendarToday fontSize="small" />
-              {conferenceData.dates}
-            </Typography>
-          </Container>
-        </Box>
       </Box>
 
+      {/* Event Title and Metadata */}
+      <Container maxWidth="lg" sx={{ mb: 6, textAlign: 'center' }}>
+        <Typography 
+          variant="h3" 
+          component="h1" 
+          sx={{ 
+            fontWeight: 'bold', 
+            mb: 3,
+            fontSize: { xs: '2.5rem', md: '3.5rem' },
+            lineHeight: 1.2
+          }}
+        >
+          {conferenceData.theme}
+        </Typography>
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center',
+          gap: 2,
+          color: 'text.secondary'
+        }}>
+          <CalendarToday fontSize="small" />
+          <Typography variant="h6">
+            {format(new Date(conferenceData.createdAt), 'MMMM dd, yyyy')}
+          </Typography>
+        </Box>
+      </Container>
+
       {/* Main Content */}
-      <Container maxWidth="lg" sx={{ py: 6 }}>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
         {/* Stats Overview */}
         <Grid container spacing={3} sx={{ mb: 6 }}>
           <Grid item xs={12} md={4}>
@@ -176,7 +190,6 @@ const EventDetails = () => {
                             {committee.name}
                           </Typography>
                         </Box>
-                        
                         {committee.awards?.length > 0 && (
                           <Box sx={{ mb: 2 }}>
                             <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
@@ -195,7 +208,6 @@ const EventDetails = () => {
                             </Box>
                           </Box>
                         )}
-                        
                         {committee.winners?.length > 0 && (
                           <Box>
                             <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
@@ -203,10 +215,10 @@ const EventDetails = () => {
                             </Typography>
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
                               {committee.winners.map((winner, i) => (
-                                <Chip 
-                                  label={winner} 
-                                  key={i} 
-                                  size="small" 
+                                <Chip
+                                  label={winner}
+                                  key={i}
+                                  size="small"
                                   color="success"
                                 />
                               ))}
@@ -254,29 +266,29 @@ const EventDetails = () => {
               <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
                 Our Sponsors
               </Typography>
-              <Box sx={{ 
-                display: 'flex', 
-                flexWrap: 'wrap', 
-                justifyContent: 'center', 
+              <Box sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
                 gap: 4,
                 alignItems: 'center'
               }}>
                 {conferenceData.sponsorPhotos.map((sponsor, index) => (
-                  <Box key={index} sx={{ 
-                    width: 150, 
+                  <Box key={index} sx={{
+                    width: 150,
                     height: 100,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
                   }}>
-                    <img 
-                      src={sponsor} 
-                      alt={`Sponsor ${index + 1}`} 
-                      style={{ 
-                        maxWidth: '100%', 
+                    <img
+                      src={sponsor}
+                      alt={`Sponsor ${index + 1}`}
+                      style={{
+                        maxWidth: '100%',
                         maxHeight: '100%',
                         objectFit: 'contain'
-                      }} 
+                      }}
                     />
                   </Box>
                 ))}
@@ -287,16 +299,16 @@ const EventDetails = () => {
 
         {/* Action Buttons */}
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 3, mt: 4 }}>
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             size="large"
             sx={{ px: 6 }}
             href="#register"
           >
             Register Now
           </Button>
-          <Button 
-            variant="outlined" 
+          <Button
+            variant="outlined"
             size="large"
             sx={{ px: 6 }}
             component={Link}
@@ -311,4 +323,3 @@ const EventDetails = () => {
 };
 
 export default EventDetails;
-
