@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../../config/config';
 
@@ -15,7 +13,7 @@ const ShowAdvisorMessage = () => {
                 const response = await fetch(`${API_URL}/committee`);
                 if (!response.ok) throw new Error('Failed to fetch committee');
                 const data = await response.json();
-                const advisorsOnly = data.filter(member => 
+                const advisorsOnly = data.filter(member =>
                     member.designation.toLowerCase().includes('advisor')
                 );
                 setAdvisors(advisorsOnly);
@@ -34,13 +32,13 @@ const ShowAdvisorMessage = () => {
 
         const interval = setInterval(() => {
             setIsTransitioning(true);
-            
+
             setTimeout(() => {
                 setCurrentIndex(prev => (prev + 1) % advisors.length);
                 setNextIndex(prev => (prev + 1) % advisors.length);
                 setIsTransitioning(false);
             }, 1000);
-            
+
         }, 5000);
 
         return () => clearInterval(interval);
@@ -58,41 +56,48 @@ const ShowAdvisorMessage = () => {
             <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 z-10">Meet Our Advisors</h2>
 
             <div className="relative w-full max-w-md h-72">
-                {/* Current Advisor (main card) */}
-                <div className={`absolute bg-white rounded-lg p-6 w-full flex flex-col items-center transition-all duration-1000 ease-in-out ${
-                    isTransitioning ? '-translate-x-full opacity-0' : 'translate-x-0 opacity-100'
-                }`}>
+                {/* Current Advisor */}
+                <div className={`absolute bg-white rounded-lg p-6 w-full flex flex-col items-center transition-all duration-1000 ease-in-out ${isTransitioning ? '-translate-x-full opacity-0' : 'translate-x-0 opacity-100'}`}>
                     <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-blue-500 mb-4">
                         <img
-                            src={currentAdvisor?.imageUrl || 'https://via.placeholder.com/300'}
+                            src={currentAdvisor?.profileUrl || 'https://via.placeholder.com/300'}
                             alt={currentAdvisor?.name}
                             className="w-full h-full object-cover"
                         />
                     </div>
                     <h3 className="text-xl font-semibold text-gray-900">{currentAdvisor?.name}</h3>
-                    <p className="text-md text-gray-500 mb-4">{currentAdvisor?.designation}</p>
+                     {/* Workplace */}
+                    <p className="text-md text-white mb-4 bg-primary py-2 px-4 bg-secondary">{currentAdvisor?.designation}</p>
                     <p className="italic text-gray-700 text-center text-md leading-relaxed max-w-xs">
-                        "{currentAdvisor?.message}"
+                        "{currentAdvisor?.advisorMessage}"
                     </p>
+                    <p className="text-sm  text-xl text-gray-600 mt-2">{currentAdvisor?.worksAt}</p>
                 </div>
 
-                {/* Next Advisor (peeking from right) */}
+                {/* Next Advisor */}
                 {advisors.length > 1 && (
-                    <div className={`absolute bg-white rounded-lg p-4 w-full flex flex-col items-center transition-all duration-1000 ease-in-out ${
-                        isTransitioning ? 'translate-x-0 opacity-100' : 'translate-x-[30%] opacity-70'
-                    }`} style={{
-                        right: isTransitioning ? '0' : '-30%',
-                        filter: isTransitioning ? 'none' : 'brightness(0.95)'
-                    }}>
+                    <div
+                        className={`absolute bg-white rounded-lg p-4 w-full flex flex-col items-center transition-all duration-1000 ease-in-out ${
+                            isTransitioning ? 'translate-x-0 opacity-100' : 'translate-x-[30%] opacity-70'
+                        }`}
+                        style={{
+                            right: isTransitioning ? '0' : '-30%',
+                            filter: isTransitioning ? 'none' : 'brightness(0.95)',
+                        }}
+                    >
                         <div className="w-28 h-28 rounded-full overflow-hidden border-2 border-blue-400 mb-3">
                             <img
-                                src={nextAdvisor?.imageUrl || 'https://via.placeholder.com/300'}
+                                src={nextAdvisor?.profileUrl || 'https://via.placeholder.com/300'}
                                 alt={nextAdvisor?.name}
                                 className="w-full h-full object-cover"
                             />
                         </div>
                         <h3 className="text-lg font-semibold text-gray-800">{nextAdvisor?.name}</h3>
-                        <p className="text-sm text-gray-500">{nextAdvisor?.designation}</p>
+                        <p className="text-sm text-gray-600">{nextAdvisor?.organization}</p> {/* Workplace */}
+                        <p className="text-md text-white mb-4 bg-primary py-2 px-4 bg-secondary">{nextAdvisor?.designation}</p>
+                        <p className="italic text-gray-700 text-center text-md leading-relaxed max-w-xs">
+                            "{nextAdvisor?.advisorMessage}"
+                        </p>
                     </div>
                 )}
             </div>

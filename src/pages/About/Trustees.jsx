@@ -1,12 +1,11 @@
 
-
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../../config/config';
+
 const Trustees = () => {
     const [trustees, setTrustees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
- 
 
     useEffect(() => {
         const fetchTrustees = async () => {
@@ -16,7 +15,6 @@ const Trustees = () => {
                     throw new Error('Failed to fetch data');
                 }
                 const data = await response.json();
-                // Filter members with Trustee designation
                 const trusteeMembers = data.filter(member => member.designation === 'Trustee');
                 setTrustees(trusteeMembers);
                 setLoading(false);
@@ -27,7 +25,7 @@ const Trustees = () => {
         };
 
         fetchTrustees();
-    }, [API_URL]);
+    }, []);
 
     if (loading) {
         return (
@@ -51,7 +49,7 @@ const Trustees = () => {
     return (
         <div className="container mx-auto px-4 py-8">
             <h1 className="text-3xl font-bold text-center mb-8">Our Trustees</h1>
-            
+
             {trustees.length === 0 ? (
                 <div className="alert alert-info max-w-md mx-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
@@ -62,24 +60,25 @@ const Trustees = () => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {trustees.map(trustee => (
-                        <div key={trustee._id} className="card bg-base-100 shadow-xl">
+                        <div key={trustee._id} className="card bg-base-100 shadow-xl min-h-[500px] flex flex-col">
                             <figure className="px-4 pt-4">
                                 <img 
-                                    src={trustee.profileUrl || 'https://via.placeholder.com/400x300'} 
+                                    src={trustee.profileUrl || 'https://via.placeholder.com/400x500'} 
                                     alt={trustee.name} 
-                                    className="rounded-xl h-64 w-full object-cover"
+                                    className="rounded-xl h-80 w-full object-cover object-top"
                                 />
                             </figure>
-                            <div className="card-body">
-                                <h2 className="card-title">{trustee.name}</h2>
-                                <div className="badge badge-primary">{trustee.designation}</div>
-                                
+                            <div className="card-body items-center text-center">
+                                <h2 className="card-title text-3xl">{trustee.name}</h2>
+                                {/* <div className="badge badge-primary mb-2">{trustee.designation}</div> */}
+                                <div className='inline-block px-3 py-1 text-sm font-medium bg-gray-100 rounded-none mt-2 bg-primary text-white text-xl'>{trustee.designation}</div>
+
                                 {trustee.awards && trustee.awards.length > 0 && (
                                     <div className="mt-2">
                                         <h3 className="font-semibold mb-1">Awards:</h3>
                                         <ul className="space-y-1">
                                             {trustee.awards.map((award, index) => (
-                                                <li key={index} className="flex items-start">
+                                                <li key={index} className="flex items-start justify-center">
                                                     <span className="mr-2 mt-1">✅</span>
                                                     <span>{award}</span>
                                                 </li>
@@ -97,3 +96,4 @@ const Trustees = () => {
 };
 
 export default Trustees;
+

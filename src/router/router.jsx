@@ -22,10 +22,11 @@ import Founders from "../pages/About/Founders.jsx";
 import Advisors from "../pages/About/Advisors.jsx";
 import Team from "../pages/Team/Team.jsx";
 import Trustees from "../pages/About/Trustees.jsx";
-import PrevGovtBoard from "../pages/About/PrevGovtBoard.jsx"
+
 import Announcement from "../pages/Announcement/Announcement.jsx";
 import Events from "../pages/Events/Events.jsx";
 import ExtraEventDetails from "../pages/ExtraEvenDetails/ExtraEventDetails.jsx";
+import GoverningBoardMembers from "../pages/About/GoverningBoard.jsx";
 // import Committee from "../pages/Committee/Committee.jsx";
 
 
@@ -122,8 +123,8 @@ const router = createBrowserRouter([
         element: <Trustees></Trustees>
       },
       {
-        path: "about/previous-board",
-        element: <PrevGovtBoard></PrevGovtBoard>
+        path: "about/governingboard",
+        element: <GoverningBoardMembers></GoverningBoardMembers>
       },
 
       {

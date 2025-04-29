@@ -32,7 +32,7 @@ const Navbar = () => {
                         <li><NavLink className={textSizes.dropdown} to="/about/advisors">Advisors</NavLink></li>
                         <li><NavLink className={textSizes.dropdown} to="/about/founders">Founders</NavLink></li>
                         <li><NavLink className={textSizes.dropdown} to="/about/trustees">Trustees</NavLink></li>
-                        <li><NavLink className={textSizes.dropdown} to="/about/previous-board">Governing Board</NavLink></li>
+                        <li><NavLink className={textSizes.dropdown} to="/about/governingboard">Governing Board</NavLink></li>
                         <li><NavLink className={textSizes.dropdown} to="/conference">CUMUN</NavLink></li>
                     </ul>
                 </details>
@@ -98,7 +98,7 @@ const Navbar = () => {
                                 <li><NavLink to="/about/advisors">Advisors</NavLink></li>
                                 <li><NavLink to="/about/founders">Founders</NavLink></li>
                                 <li><NavLink to="/about/trustees">Trustees</NavLink></li>
-                                <li><NavLink to="/about/previous-board">Governing Board</NavLink></li>
+                                <li><NavLink to="/about/governingboard">Governing Board</NavLink></li>
                                 <li><NavLink to="/conference">CUMUN</NavLink></li>
                             </ul>
                         </li>
