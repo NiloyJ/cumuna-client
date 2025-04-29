@@ -1,9 +1,26 @@
+
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { API_URL } from '../../config/config';
-import { Box, Button, Container, Typography, Alert, CircularProgress } from '@mui/material';
+import { 
+  Box, Button, Container, Typography, Alert, 
+  CircularProgress, Grid, Card, CardMedia, 
+  CardContent, Chip, Divider, Avatar
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { CalendarToday, People, School, Business } from '@mui/icons-material';
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  transition: 'transform 0.3s',
+  '&:hover': {
+    transform: 'scale(1.03)',
+    boxShadow: theme.shadows[6]
+  }
+}));
 
 const EventDetails = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [conferenceData, setConferenceData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,378 +28,281 @@ const EventDetails = () => {
   const [deleteError, setDeleteError] = useState(null);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchEvent = async () => {
       try {
-        const response = await fetch(`${API_URL}/events/`);
+        const response = await fetch(`${API_URL}/events/${id}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch conference data');
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setConferenceData(data[0]); // Assuming the API returns an array with one conference
+        
+        if (!data.success) {
+          throw new Error(data.message || 'Event not found');
+        }
+        
+        setConferenceData(data.data);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-    fetchEvents();
-  }, []);
+    
+    fetchEvent();
+  }, [id]);
 
-  const handleDelete = async () => {
-    if (!conferenceData || !conferenceData._id) {
-      setDeleteError('No conference data available to delete');
-      return;
-    }
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+        <CircularProgress size={60} />
+      </Box>
+    );
+  }
 
-    // Confirm deletion
-    if (!window.confirm('Are you sure you want to delete this conference? This action cannot be undone.')) {
-      return;
-    }
+  if (error) {
+    return (
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          Error: {error}
+        </Alert>
+        <Button variant="contained" component={Link} to="/">
+          Back to Events
+        </Button>
+      </Container>
+    );
+  }
 
-    setDeleteLoading(true);
-    setDeleteError(null);
-
-    try {
-      const response = await fetch(`${API_URL}/events/${conferenceData._id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete conference');
-      }
-
-      // Redirect to home page or events list after successful deletion
-      // Assuming you want to redirect to the home page
-      window.location.href = '/';
-    } catch (err) {
-      setDeleteError(err.message);
-    } finally {
-      setDeleteLoading(false);
-    }
-  };
-
-  if (loading) return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
-      <CircularProgress />
-    </Box>
-  );
-  
-  if (error) return (
-    <Box p={3}>
-      <Alert severity="error">Error: {error}</Alert>
-    </Box>
-  );
-  
-  if (!conferenceData) return (
-    <Box p={3}>
-      <Alert severity="info">No conference data found</Alert>
-    </Box>
-  );
+  if (!conferenceData) {
+    return (
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Alert severity="info" sx={{ mb: 2 }}>
+          No conference data found
+        </Alert>
+        <Button variant="contained" component={Link} to="/">
+          Back to Events
+        </Button>
+      </Container>
+    );
+  }
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-      {/* Hero Section with Banner */}
-      <Box position="relative" sx={{ height: '400px' }}>
-        <Box 
-          sx={{ 
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            bgcolor: 'rgba(0,0,0,0.5)',
-            zIndex: 1
-          }}
-        />
-        <Box
+    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
+      {/* Hero Banner */}
+      <Box sx={{ position: 'relative', height: { xs: '300px', md: '500px' } }}>
+        <CardMedia
           component="img"
-          src={conferenceData.bannerUrl}
-          alt="Conference Banner"
-          sx={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover'
-          }}
+          image={conferenceData.bannerUrl}
+          alt={conferenceData.theme}
+          sx={{ height: '100%', width: '100%', objectFit: 'cover' }}
         />
-        <Box
-          sx={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            bgcolor: 'rgba(0,0,0,0.7)',
-            p: 3,
-            zIndex: 2
-          }}
-        >
+        <Box sx={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          bgcolor: 'rgba(0,0,0,0.7)',
+          color: 'white',
+          p: 3,
+          textAlign: 'center'
+        }}>
           <Container maxWidth="lg">
-            <Typography variant="h3" color="white" gutterBottom>
-              Model United Nations Conference
-            </Typography>
-            <Typography variant="h5" color="white">
+            <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
               {conferenceData.theme}
+            </Typography>
+            <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+              <CalendarToday fontSize="small" />
+              {conferenceData.dates}
             </Typography>
           </Container>
         </Box>
       </Box>
 
-      {/* Conference Details */}
+      {/* Main Content */}
       <Container maxWidth="lg" sx={{ py: 6 }}>
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 3, mb: 6 }}>
-          <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1, textAlign: 'center' }}>
-            <Typography variant="h4" color="primary" gutterBottom>
-              {conferenceData.duration} days
-            </Typography>
-            <Typography variant="subtitle1">Duration</Typography>
-            <Typography variant="body2" color="text.secondary">
-              {conferenceData.dates}
-            </Typography>
-          </Box>
-
-          <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1, textAlign: 'center' }}>
-            <Typography variant="h4" color="primary" gutterBottom>
-              {conferenceData.totalCommittees}
-            </Typography>
-            <Typography variant="subtitle1">Committees</Typography>
-          </Box>
-
-          <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1, textAlign: 'center' }}>
-            <Typography variant="h4" color="primary" gutterBottom>
-              {conferenceData.totalDelegates}
-            </Typography>
-            <Typography variant="subtitle1">Total Delegates</Typography>
-            <Typography variant="body2" color="text.secondary">
-              {conferenceData.internationalDelegates} International
-            </Typography>
-          </Box>
-        </Box>
-
-        {/* Theme Section */}
-        <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1, mb: 6 }}>
-          <Typography variant="h5" gutterBottom>
-            Conference Theme
-          </Typography>
-          <Typography variant="body1">
-            {conferenceData.theme}
-          </Typography>
-        </Box>
-
-        {/* Gallery Section */}
-        {conferenceData.gallery && conferenceData.gallery.length > 0 && (
-          <Box sx={{ mb: 6 }}>
-            <Typography variant="h5" gutterBottom>
-              Gallery
-            </Typography>
-            <Box sx={{ 
-              display: 'grid', 
-              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, 
-              gap: 2 
-            }}>
-              {conferenceData.gallery.map((image, index) => (
-                <Box 
-                  key={index} 
-                  sx={{ 
-                    position: 'relative',
-                    height: '200px',
-                    borderRadius: 1,
-                    overflow: 'hidden',
-                    '&:hover .overlay': {
-                      opacity: 1
-                    }
-                  }}
-                >
-                  <Box
-                    component="img"
-                    src={image}
-                    alt={`Gallery ${index + 1}`}
-                    sx={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover'
-                    }}
-                  />
-                  <Box
-                    className="overlay"
-                    sx={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      bgcolor: 'rgba(0,0,0,0.5)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      opacity: 0,
-                      transition: 'opacity 0.3s'
-                    }}
-                  >
-                    <Button variant="contained" color="primary">
-                      View
-                    </Button>
-                  </Box>
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        )}
+        {/* Stats Overview */}
+        <Grid container spacing={3} sx={{ mb: 6 }}>
+          <Grid item xs={12} md={4}>
+            <StyledCard>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h4" color="primary" gutterBottom>
+                  {conferenceData.duration} days
+                </Typography>
+                <Typography variant="subtitle1">Duration</Typography>
+              </CardContent>
+            </StyledCard>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <StyledCard>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h4" color="primary" gutterBottom>
+                  {conferenceData.totalCommittees}
+                </Typography>
+                <Typography variant="subtitle1">Committees</Typography>
+              </CardContent>
+            </StyledCard>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <StyledCard>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h4" color="primary" gutterBottom>
+                  {conferenceData.totalDelegates}
+                </Typography>
+                <Typography variant="subtitle1">Total Delegates</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  ({conferenceData.internationalDelegates} International)
+                </Typography>
+              </CardContent>
+            </StyledCard>
+          </Grid>
+        </Grid>
 
         {/* Committees Section */}
-        {conferenceData.committees && conferenceData.committees.length > 0 && (
-          <Box sx={{ mb: 6 }}>
-            <Typography variant="h5" gutterBottom>
-              Committees
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {conferenceData.committees.map((committee, index) => (
-                <Box 
-                  key={index} 
-                  sx={{ 
-                    p: 3, 
-                    bgcolor: 'background.paper', 
-                    borderRadius: 1, 
-                    boxShadow: 1 
-                  }}
-                >
-                  <Typography variant="h6" color="primary" gutterBottom>
-                    {committee.name}
-                  </Typography>
-                  
-                  {committee.awards && committee.awards.length > 0 && (
-                    <Box sx={{ mt: 2 }}>
-                      <Typography variant="subtitle1" fontWeight="bold">
-                        Awards:
-                      </Typography>
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
-                        {committee.awards.map((award, awardIndex) => (
-                          <Box 
-                            key={awardIndex}
-                            sx={{ 
-                              bgcolor: 'primary.light', 
-                              color: 'primary.contrastText',
-                              px: 2,
-                              py: 0.5,
-                              borderRadius: 1,
-                              fontSize: '0.875rem'
-                            }}
-                          >
-                            {award}
+        {conferenceData.committees?.length > 0 && (
+          <Card sx={{ mb: 6 }}>
+            <CardContent>
+              <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
+                Committees & Awards
+              </Typography>
+              <Grid container spacing={3}>
+                {conferenceData.committees.map((committee, index) => (
+                  <Grid item xs={12} md={6} key={index}>
+                    <Card variant="outlined">
+                      <CardContent>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                          <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+                            <School />
+                          </Avatar>
+                          <Typography variant="h6" color="primary">
+                            {committee.name}
+                          </Typography>
+                        </Box>
+                        
+                        {committee.awards?.length > 0 && (
+                          <Box sx={{ mb: 2 }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+                              Awards:
+                            </Typography>
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+                              {committee.awards.map((award, i) => (
+                                <Chip 
+                                  label={award} 
+                                  key={i} 
+                                  size="small" 
+                                  color="primary"
+                                  variant="outlined"
+                                />
+                              ))}
+                            </Box>
                           </Box>
-                        ))}
-                      </Box>
-                    </Box>
-                  )}
-                  
-                  {committee.winners && committee.winners.length > 0 && (
-                    <Box sx={{ mt: 2 }}>
-                      <Typography variant="subtitle1" fontWeight="bold">
-                        Winners:
-                      </Typography>
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
-                        {committee.winners.map((winner, winnerIndex) => (
-                          <Box 
-                            key={winnerIndex}
-                            sx={{ 
-                              bgcolor: 'success.light', 
-                              color: 'success.contrastText',
-                              px: 2,
-                              py: 0.5,
-                              borderRadius: 1,
-                              fontSize: '0.875rem'
-                            }}
-                          >
-                            {winner}
+                        )}
+                        
+                        {committee.winners?.length > 0 && (
+                          <Box>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+                              Winners:
+                            </Typography>
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+                              {committee.winners.map((winner, i) => (
+                                <Chip 
+                                  label={winner} 
+                                  key={i} 
+                                  size="small" 
+                                  color="success"
+                                />
+                              ))}
+                            </Box>
                           </Box>
-                        ))}
-                      </Box>
-                    </Box>
-                  )}
-                </Box>
-              ))}
-            </Box>
-          </Box>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Gallery Section */}
+        {conferenceData.gallery?.length > 0 && (
+          <Card sx={{ mb: 6 }}>
+            <CardContent>
+              <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
+                Event Gallery
+              </Typography>
+              <Grid container spacing={2}>
+                {conferenceData.gallery.map((image, index) => (
+                  <Grid item xs={12} sm={6} md={4} key={index}>
+                    <Card>
+                      <CardMedia
+                        component="img"
+                        image={image}
+                        alt={`Gallery ${index + 1}`}
+                        sx={{ height: 200, objectFit: 'cover' }}
+                      />
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            </CardContent>
+          </Card>
         )}
 
         {/* Sponsors Section */}
-        {conferenceData.sponsorPhotos && conferenceData.sponsorPhotos.length > 0 && (
-          <Box sx={{ mb: 6 }}>
-            <Typography variant="h5" gutterBottom>
-              Our Sponsors
-            </Typography>
-            <Box sx={{ 
-              display: 'grid', 
-              gridTemplateColumns: { 
-                xs: '1fr',
-                sm: 'repeat(2, 1fr)',
-                md: 'repeat(3, 1fr)',
-                lg: 'repeat(4, 1fr)'
-              }, 
-              gap: 3,
-              p: 2,
-              bgcolor: 'background.paper',
-              borderRadius: 1,
-              boxShadow: 1
-            }}>
-              {conferenceData.sponsorPhotos.map((photoUrl, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    position: 'relative',
-                    paddingTop: '56.25%', // 16:9 aspect ratio
-                    borderRadius: 1,
-                    overflow: 'hidden',
-                    bgcolor: 'grey.100',
-                    '&:hover': {
-                      '& img': {
-                        transform: 'scale(1.05)'
-                      }
-                    }
-                  }}
-                >
-                  <Box
-                    component="img"
-                    src={photoUrl}
-                    alt={`Sponsor ${index + 1}`}
-                    sx={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain',
-                      transition: 'transform 0.3s ease-in-out'
-                    }}
-                  />
-                </Box>
-              ))}
-            </Box>
-          </Box>
+        {conferenceData.sponsorPhotos?.length > 0 && (
+          <Card sx={{ mb: 6 }}>
+            <CardContent>
+              <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
+                Our Sponsors
+              </Typography>
+              <Box sx={{ 
+                display: 'flex', 
+                flexWrap: 'wrap', 
+                justifyContent: 'center', 
+                gap: 4,
+                alignItems: 'center'
+              }}>
+                {conferenceData.sponsorPhotos.map((sponsor, index) => (
+                  <Box key={index} sx={{ 
+                    width: 150, 
+                    height: 100,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <img 
+                      src={sponsor} 
+                      alt={`Sponsor ${index + 1}`} 
+                      style={{ 
+                        maxWidth: '100%', 
+                        maxHeight: '100%',
+                        objectFit: 'contain'
+                      }} 
+                    />
+                  </Box>
+                ))}
+              </Box>
+            </CardContent>
+          </Card>
         )}
 
-        {/* Delete Error */}
-        {deleteError && (
-          <Alert severity="error" sx={{ mb: 3 }}>
-            {deleteError}
-          </Alert>
-        )}
-
-        {/* Call to Action */}
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 4 }}>
+        {/* Action Buttons */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 3, mt: 4 }}>
           <Button 
             variant="contained" 
-            color="primary" 
             size="large"
+            sx={{ px: 6 }}
+            href="#register"
           >
             Register Now
           </Button>
           <Button 
-            variant="contained" 
-            color="error" 
+            variant="outlined" 
             size="large"
-            onClick={handleDelete}
-            disabled={deleteLoading}
+            sx={{ px: 6 }}
+            component={Link}
+            to="/events"
           >
-            {deleteLoading ? 'Deleting...' : 'Delete Conference'}
+            Back to Events
           </Button>
         </Box>
       </Container>
