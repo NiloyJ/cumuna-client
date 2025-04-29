@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { API_URL } from '../../config/config';
@@ -94,22 +93,22 @@ const EventDetails = () => {
           image={conferenceData.bannerUrl}
           alt={conferenceData.theme}
           sx={{
-            width: '100%',
-            height: { xs: 250, md: 450 },
+            width: '100vw',
+            height: '100vh',
             objectFit: 'cover',
-            borderRadius: 1,
-            boxShadow: 3
+            borderRadius: 0,
+            boxShadow: 0
           }}
         />
       </Box>
 
       {/* Event Title and Metadata */}
       <Container maxWidth="lg" sx={{ mb: 6, textAlign: 'center' }}>
-        <Typography 
-          variant="h3" 
-          component="h1" 
-          sx={{ 
-            fontWeight: 'bold', 
+        <Typography
+          variant="h3"
+          component="h1"
+          sx={{
+            fontWeight: 'bold',
             mb: 3,
             fontSize: { xs: '2.5rem', md: '3.5rem' },
             lineHeight: 1.2
@@ -117,9 +116,9 @@ const EventDetails = () => {
         >
           {conferenceData.theme}
         </Typography>
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'center',
           alignItems: 'center',
           gap: 2,
           color: 'text.secondary'
@@ -197,10 +196,10 @@ const EventDetails = () => {
                             </Typography>
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
                               {committee.awards.map((award, i) => (
-                                <Chip 
-                                  label={award} 
-                                  key={i} 
-                                  size="small" 
+                                <Chip
+                                  label={award}
+                                  key={i}
+                                  size="small"
                                   color="primary"
                                   variant="outlined"
                                 />
