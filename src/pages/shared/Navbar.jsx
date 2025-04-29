@@ -35,7 +35,7 @@ const Navbar = () => {
 
                             <li>
                                 <details className={textSizes.base}>
-                                    <summary className={`${textSizes.dropdown} font-semibold`}>Meet the Committee</summary>
+                                    <summary className={`${textSizes.dropdown} font-semibold`}>Meet the Community</summary>
                                     <ul className="p-2 space-y-2">
                                         <li><NavLink className={textSizes.dropdown} to="/about/advisors">Advisors</NavLink></li>
                                         <li><NavLink className={textSizes.dropdown} to="/about/founders">Founders</NavLink></li>
@@ -56,7 +56,7 @@ const Navbar = () => {
                             {user && <li><NavLink to="/changebanner" className={textSizes.base}>Change Banner</NavLink></li>}
                             <li><NavLink to="/blogs" className={textSizes.base}>Blogs</NavLink></li>
                             <li><NavLink to="/extraevents" className={textSizes.base}>Events</NavLink></li>
-                            <li><NavLink to="/resources" className={textSizes.base}>Study Guides</NavLink></li>
+                            <li><NavLink to="/resources" className={textSizes.base}>Resources</NavLink></li>
 
                             {user ? (
                                 <li><button onClick={handleSignOut}>Logout</button></li>
@@ -83,7 +83,7 @@ const Navbar = () => {
 
                         <li tabIndex={0} className="dropdown dropdown-hover">
                             <div className={`hover:text-blue-600 cursor-pointer flex items-center gap-1 ${textSizes.base}`}>
-                                Meet the Committee
+                                Meet the Community
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                                 </svg>
@@ -107,7 +107,7 @@ const Navbar = () => {
                         {user && <li><NavLink to="/changebanner" className={`hover:text-blue-600 ${textSizes.base}`}>Change Banner</NavLink></li>}
                         <li><NavLink to="/blogs" className={`hover:text-blue-600 ${textSizes.base}`}>Blogs</NavLink></li>
                         <li><NavLink to="/extraevents" className={`hover:text-blue-600 ${textSizes.base}`}>Events</NavLink></li>
-                        <li><NavLink to="/resources" className={`hover:text-blue-600 ${textSizes.base}`}>Study Guides</NavLink></li>
+                        <li><NavLink to="/resources" className={`hover:text-blue-600 ${textSizes.base}`}>Resources</NavLink></li>
                     </ul>
                 </div>
 
