@@ -27,6 +27,7 @@ import Announcement from "../pages/Announcement/Announcement.jsx";
 import Events from "../pages/Events/Events.jsx";
 import ExtraEventDetails from "../pages/ExtraEvenDetails/ExtraEventDetails.jsx";
 import GoverningBoardMembers from "../pages/About/GoverningBoard.jsx";
+import AboutCumuna from "../pages/AboutCumuna/AboutCumuna.jsx";
 // import Committee from "../pages/Committee/Committee.jsx";
 
 
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
       {
         path: "/resources",
         element: <Resources></Resources>
+      },
+      {
+        path: "/aboutus",
+        element: <AboutCumuna></AboutCumuna>
       },
       {
         path: "/committee",

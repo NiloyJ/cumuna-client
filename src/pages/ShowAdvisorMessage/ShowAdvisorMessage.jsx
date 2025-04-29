@@ -55,7 +55,7 @@ const ShowAdvisorMessage = () => {
         <div className="w-full flex flex-col items-center justify-center py-6 px-4 bg-gray-100 overflow-hidden relative">
             <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 z-10">Meet Our Advisors</h2>
 
-            <div className="relative w-full max-w-md h-72">
+            <div className="relative w-full max-w-md h-[345px]">
                 {/* Current Advisor */}
                 <div className={`absolute bg-white rounded-lg p-6 w-full flex flex-col items-center transition-all duration-1000 ease-in-out ${isTransitioning ? '-translate-x-full opacity-0' : 'translate-x-0 opacity-100'}`}>
                     <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-blue-500 mb-4">

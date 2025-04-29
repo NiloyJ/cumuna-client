@@ -106,7 +106,7 @@ const Navbar = () => {
                         {/* Other navigation links */}
                         <li><NavLink to="/committee" className={`hover:text-blue-600 ${textSizes.base}`}>Committee</NavLink></li>
                         {user && <li><NavLink to="/addpost" className={`hover:text-blue-600 ${textSizes.base}`}>Add a post</NavLink></li>}
-                         <li><NavLink to="/about" className={`hover:text-blue-600 ${textSizes.base}`}>About</NavLink></li>
+                         <li><NavLink to="/aboutus" className={`hover:text-blue-600 ${textSizes.base}`}>About</NavLink></li>
                         {user && <li><NavLink to="/addpresident" className={`hover:text-blue-600 ${textSizes.base}`}>Add president</NavLink></li>}
                         {user && <li><NavLink to="/addevent" className={`hover:text-blue-600 ${textSizes.base}`}>Add events</NavLink></li>}
                         <li><NavLink to="/announcements" className={`hover:text-blue-600 ${textSizes.base}`}>Announcements</NavLink></li>
