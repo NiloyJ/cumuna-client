@@ -83,7 +83,7 @@ const ContactUs = () => {
               <div>
                 <h4 className="text-xl font-semibold">Address</h4>
                 <p className="text-white">University of Chittagong</p>
-                <p>{import.meta.env.VITE_DB}</p>
+               
               </div>
             </div>
           </div>

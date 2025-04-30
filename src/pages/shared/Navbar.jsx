@@ -46,7 +46,7 @@ const Navbar = () => {
                             </li>
 
                             <li><NavLink to="/allconferences" className={textSizes.base}>CUMUN</NavLink></li>
-                            <li><NavLink to="/committee" className={textSizes.base}>Community</NavLink></li>
+                            {user &&<li><NavLink to="/committee" className={textSizes.base}> Add Community</NavLink></li>}
                             <li><NavLink to="/aboutus" className={textSizes.base}>About</NavLink></li>
                             <li><NavLink to="/contactus" className={textSizes.base}>Contact us</NavLink></li>
                             {user && <li><NavLink to="/addpost" className={textSizes.base}>Add a post</NavLink></li>}
@@ -62,7 +62,7 @@ const Navbar = () => {
                                 <li><button onClick={handleSignOut}>Logout</button></li>
                             ) : (
                                 <>
-                                    <li><Link to="/register">Register</Link></li>
+                                    <li><Link to="auth/user/register">Register</Link></li>
                                     <li><Link to="/signin">Sign In</Link></li>
                                 </>
                             )}
@@ -97,7 +97,7 @@ const Navbar = () => {
                         </li>
 
                         <li><NavLink to="/allconferences" className={`hover:text-blue-600 ${textSizes.base}`}>CUMUN</NavLink></li>
-                        <li><NavLink to="/committee" className={`hover:text-blue-600 ${textSizes.base}`}>Community</NavLink></li>
+                        {user && <li><NavLink to="/committee" className={`hover:text-blue-600 ${textSizes.base}`}>Add Community</NavLink></li>}
                         <li><NavLink to="/aboutus" className={`hover:text-blue-600 ${textSizes.base}`}>About</NavLink></li>
                         <li><NavLink to="/contactus" className={`hover:text-blue-600 ${textSizes.base}`}>Contact us</NavLink></li>
                         {user && <li><NavLink to="/addpost" className={`hover:text-blue-600 ${textSizes.base}`}>Add a post</NavLink></li>}
@@ -124,7 +124,7 @@ const Navbar = () => {
                         </>
                     ) : (
                         <>
-                            <Link to="/register" className="hidden sm:inline-flex hover:text-blue-600">Register</Link>
+                            {/* <Link to="auth/user/register" className="hidden sm:inline-flex hover:text-blue-600">Register</Link> */}
                             <Link to="/signin">
                                 <button className="btn btn-sm sm:btn-md bg-blue-600 text-white hover:bg-blue-700">
                                     Sign In

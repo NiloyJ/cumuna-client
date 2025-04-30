@@ -122,7 +122,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/committee",
-        element: <Team></Team>
+        element: <PrivateRoute><Team></Team></PrivateRoute>
       },
       {
         path: "/about/founders",
@@ -151,7 +151,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: '/register',
+        path: '/auth/user/register',
         element: <Register></Register>
       },
       {
