@@ -17,12 +17,13 @@ const Home = () => {
     return (
         <div>
             <Banner></Banner>
-            <ShowAdvisorMessage></ShowAdvisorMessage>
+            
             <ShowAnnouncements></ShowAnnouncements>
             <HotEvents></HotEvents>
             {/* <ShowPresident></ShowPresident> */}
             <DefaultFlagship></DefaultFlagship>
             <ShowEvents></ShowEvents>
+            <ShowAdvisorMessage></ShowAdvisorMessage>
         
         </div>
     );

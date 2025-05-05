@@ -30,27 +30,29 @@ const HotBlog = () => {
     }).slice(0, 5);
 
     return (
-        <div>
+        <div className='pt-2 pb-8'>
             {/* ... rest of your existing JSX remains exactly the same ... */}
-            <div className='px-2 sm:px-4'>
-                <div className='grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 xs:gap-4'>
-                    {displayedJobs.map(job => (
-                        <HotBlogCard
-                            blogData={jobs}
-                            setJobs={setJobs}
-                            key={job._id}
-                            job={job}
-                        />
-                    ))}
-                </div>
-                {jobs.length > 5 && (
-                    <div className="text-center mt-6">
-                        <Link to="/blogs" className="btn text-white bg-primary hover:bg-primary-focus border-0">
-                            See All Blogs
-                        </Link>
+           
+                <div className='px-2 sm:px-4'>
+                    <div className='grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 xs:gap-4'>
+                        {displayedJobs.map(job => (
+                            <HotBlogCard
+                                blogData={jobs}
+                                setJobs={setJobs}
+                                key={job._id}
+                                job={job}
+                            />
+                        ))}
                     </div>
-                )}
-            </div>
+                    {jobs.length > 5 && (
+                        <div className="text-center mt-6">
+                            <Link to="/blogs" className="btn text-white bg-primary hover:bg-primary-focus border-0">
+                                See All Blogs
+                            </Link>
+                        </div>
+                    )}
+                </div>
+           
         </div>
     );
 };
