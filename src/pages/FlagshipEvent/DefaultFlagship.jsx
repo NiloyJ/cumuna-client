@@ -1,0 +1,64 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+const DefaultFlagship = () => {
+    return (
+        <div className="max-w-7xl mx-auto px-4 py-10">
+            <header className="text-center mb-12 border-b border-base-200 pb-10">
+                <h1 className="text-4xl font-bold text-primary mb-2">
+                    Empowering Tomorrow's Diplomats
+                </h1>
+                <p className="text-base-content/60 max-w-xl mx-auto text-lg font-light">
+                    Shaping the leaders of tomorrow through diplomacy, debate, and international cooperation
+                </p>
+            </header>
+
+            <div className="flex flex-wrap gap-8 justify-center">
+                {/* Card 1 */}
+                <div className="card w-full max-w-sm bg-base-100 shadow-xl transition hover:-translate-y-1 hover:shadow-2xl">
+                    <div className="card-body items-center text-center">
+                        <h2 className="card-title text-primary">Committee Sessions</h2>
+                        <div className="text-4xl mt-2 text-secondary">🗣️</div>
+                        <p className="text-base-content/60 mt-4">
+                            Engage in lively debates representing your assigned country's position on global issues. Develop resolutions through collaboration and negotiation with other delegates.
+                        </p>
+                        <div className="card-actions mt-4">
+                            <Link to="/allconferences" className="btn btn-primary">Learn More</Link>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Card 2 */}
+                <div className="card w-full max-w-sm bg-base-100 shadow-xl transition hover:-translate-y-1 hover:shadow-2xl">
+                    <div className="card-body items-center text-center">
+                        <h2 className="card-title text-primary">Resolution Drafting</h2>
+                        <div className="text-4xl mt-2 text-secondary">✍️</div>
+                        <p className="text-base-content/60 mt-4">
+                            Work with fellow delegates to craft comprehensive resolutions that address complex international problems with viable, multilateral solutions.
+                        </p>
+                        <div className="card-actions mt-4">
+                            <Link to="/allconferences" className="btn btn-primary">Learn More</Link>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Card 3 */}
+                <div className="card w-full max-w-sm bg-base-100 shadow-xl transition hover:-translate-y-1 hover:shadow-2xl">
+                    <div className="card-body items-center text-center">
+                        <h2 className="card-title text-primary">Voting & Consensus</h2>
+                        <div className="text-4xl mt-2 text-secondary">✅</div>
+                        <p className="text-base-content/60 mt-4">
+                            Participate in formal voting procedures to adopt resolutions, practicing the art of diplomacy to build consensus among diverse national interests.
+                        </p>
+                        <div className="card-actions mt-4">
+                            <Link to="/allconferences" className="btn btn-primary">Learn More</Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    );
+};
+
+export default DefaultFlagship;

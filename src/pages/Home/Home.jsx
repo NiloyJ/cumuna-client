@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from 'react';
 import Banner from './Banner';
 import HotEvents from './HotBlogs';
@@ -9,6 +11,7 @@ import ShowAdvisorMessage from '../ShowAdvisorMessage/ShowAdvisorMessage';
 import Events from '../Events/Events';
 import ShowEvents from '../Events/ShowEvents';
 import FlagshipEvent from '../FlagshipEvent/FlagshipEvent';
+import DefaultFlagship from '../FlagshipEvent/DefaultFlagship';
 const Home = () => {
 
     return (
@@ -18,7 +21,7 @@ const Home = () => {
             <ShowAnnouncements></ShowAnnouncements>
             <HotEvents></HotEvents>
             {/* <ShowPresident></ShowPresident> */}
-            {/* <FlagshipEvent></FlagshipEvent> */}
+            <DefaultFlagship></DefaultFlagship>
             <ShowEvents></ShowEvents>
         
         </div>

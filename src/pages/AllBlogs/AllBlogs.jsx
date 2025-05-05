@@ -1,52 +1,46 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext/AuthContext';
-import Swal from 'sweetalert2';
 import BlogCard from '../Home/HotBlogCard';
 import { API_URL } from '../../config/config';
 
 const AllBlogs = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deletingId, setDeletingId] = useState(null); // Track which blog is being deleted
     const [searchTerm, setSearchTerm] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('');
     const { user } = useContext(AuthContext);
 
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const response = await fetch(`${API_URL}/blogs`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch blogs');
-                }
-                const data = await response.json();
-                const normalizedData = data.map(blog => ({
-                    ...blog,
-                    category: normalizeCategory(blog.category),
-                    image: blog.thumbnailUrl || blog.bannerUrl,
-                }));
-                setBlogs(normalizedData);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching blogs:', error);
-                setLoading(false);
+    const fetchBlogs = async () => {
+        try {
+            const response = await fetch(`${API_URL}/blogs`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch blogs');
             }
-        };
+            const data = await response.json();
+            const normalizedData = data.map(blog => ({
+                ...blog,
+                category: normalizeCategory(blog.category),
+                image: blog.thumbnailUrl || blog.bannerUrl,
+            }));
+            setBlogs(normalizedData);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching blogs:', error);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchBlogs();
     }, []);
 
     const handleDelete = async (id) => {
-        const result = await Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
-        });
-
-        if (result.isConfirmed) {
+        const result = window.confirm("Are you sure you want to delete this blog?");
+        
+        if (result) {
+            setDeletingId(id); // Set the deleting state
             try {
                 const response = await fetch(`${API_URL}/blogs/${id}`, {
                     method: 'DELETE'
@@ -54,11 +48,14 @@ const AllBlogs = () => {
                 const data = await response.json();
                 
                 if (data.deletedCount) {
-                    Swal.fire("Deleted!", "Your blog has been deleted.", "success");
-                    setBlogs(blogs.filter(blog => blog._id !== id));
+                    alert("Blog deleted successfully!");
+                    fetchBlogs(); // Re-fetch the blogs after deletion
                 }
             } catch (error) {
                 console.error('Error deleting blog:', error);
+                alert("Failed to delete blog");
+            } finally {
+                setDeletingId(null); // Reset deleting state
             }
         }
     };
@@ -73,20 +70,9 @@ const AllBlogs = () => {
         return category;
     };
 
-    const formatDate = (dateString) => {
-        if (!dateString) return 'Unknown date';
-        const date = new Date(dateString);
-        if (isNaN(date)) return 'Unknown date';
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    };
-
     const filteredBlogs = blogs.filter(blog => {
         const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            blog.content.toLowerCase().includes(searchTerm.toLowerCase());
+            (blog.content && blog.content.toLowerCase().includes(searchTerm.toLowerCase()));
         const matchesCategory = !categoryFilter || blog.category === categoryFilter;
         return matchesSearch && matchesCategory;
     });
@@ -102,6 +88,16 @@ const AllBlogs = () => {
     return (
         <div className="min-h-screen bg-gray-50">
             <main className="container mx-auto px-4 py-8 max-w-6xl">
+                {/* Global loading overlay when deleting */}
+                {deletingId && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="text-white text-xl font-semibold flex items-center">
+                            <span className="loading loading-spinner loading-lg mr-3"></span>
+                            Deleting blog...
+                        </div>
+                    </div>
+                )}
+
                 <div className="mb-12 text-center">
                     <h1 className="text-4xl font-bold text-gray-800 mb-2">CUMUNA Blog</h1>
                     <p className="text-xl text-gray-600">Discover the latest articles and updates</p>
@@ -135,7 +131,8 @@ const AllBlogs = () => {
                                 key={blog._id} 
                                 job={blog} 
                                 onDelete={handleDelete} 
-                                user={user} 
+                                user={user}
+                                isDeleting={deletingId === blog._id} // Pass deleting state to card
                             />
                         ))}
                     </div>
