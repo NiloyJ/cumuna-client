@@ -87,21 +87,21 @@ const ShowAnnouncements = () => {
     };
 
     return (
-        <div className="bg-gray-50 px-4 sm:px-6 lg:px-8 pt-8 pb-4"> {/* Reduced padding */}
+        <div className="bg-gray-50 px-4 sm:px-6 lg:px-8 pt-8 pb-4">
             <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-4"> {/* Reduced margin */}
+                <div className="text-center mb-4">
                     <h1 className="text-3xl font-medium text-gray-900">OFFICIAL NOTICE BOARD</h1>
                     <div className="mt-2 h-0.5 w-24 bg-gray-300 mx-auto"></div>
                 </div>
 
-                <div className="relative"> {/* Removed bottom margin */}
-                    <div className="flex flex-wrap gap-6 justify-center">
+                <div className="relative">
+                    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 justify-items-center">
                         {getCurrentAnnouncements().map((announcement) => {
                             const { text: displayText, isTruncated } = truncateText(announcement.message);
                             return (
                                 <div 
                                     key={announcement._id} 
-                                    className="flex-1 min-w-[300px] max-w-[400px] bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
+                                    className="w-full max-w-md bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
                                 >
                                     <div className="bg-gradient-to-r from-sky-500 to-blue-500 px-6 py-4">
                                         <h3 className="text-xl font-semibold text-white text-center">{announcement.title}</h3>
@@ -113,7 +113,7 @@ const ShowAnnouncements = () => {
                                             {isTruncated && (
                                                 <button 
                                                     onClick={() => openModal(announcement)}
-                                                    className="text-blue-600 hover:text-blue-800 ml-1 font-medium flex items-center"
+                                                    className="text-blue-600 hover:text-blue-800 ml-1 font-medium inline-flex items-center"
                                                 >
                                                     Read more <FiChevronRight className="ml-1" />
                                                 </button>
@@ -142,7 +142,7 @@ const ShowAnnouncements = () => {
 
                     {/* Dot Indicators */}
                     {announcements.length > 2 && (
-                        <div className="flex justify-center mt-4 space-x-2"> {/* Reduced margin */}
+                        <div className="flex justify-center mt-4 space-x-2">
                             {[0, 1].map(index => (
                                 <button
                                     key={index}
@@ -162,7 +162,7 @@ const ShowAnnouncements = () => {
                 {/* Read More Modal */}
                 {showModal && selectedAnnouncement && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                             <div className="p-6">
                                 <div className="flex justify-between items-start mb-4">
                                     <h3 className="text-xl font-semibold text-gray-800">{selectedAnnouncement.title}</h3>
@@ -190,3 +190,4 @@ const ShowAnnouncements = () => {
 };
 
 export default ShowAnnouncements;
+
