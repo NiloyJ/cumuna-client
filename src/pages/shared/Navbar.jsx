@@ -122,7 +122,7 @@ const Navbar = () => {
                                     </svg>
                                 </div>
                                 <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-white rounded-box w-48">
-                                    <li><NavLink to="/committee" className="px-2 py-1">Add Community</NavLink></li>
+                                <li><NavLink to="/committee" className="px-2 py-1">Manage Team</NavLink></li>
                                     <li><NavLink to="/addpost" className="px-2 py-1">Add post</NavLink></li>
                                     <li><NavLink to="/addpresident" className="px-2 py-1">Add president</NavLink></li>
                                     <li><NavLink to="/extraevents" className="px-2 py-1">Add Event</NavLink></li>
