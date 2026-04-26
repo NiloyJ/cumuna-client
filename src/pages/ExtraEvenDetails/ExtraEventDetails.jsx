@@ -87,3 +87,4 @@ const ExtraEventDetails = () => {
 };
 
 export default ExtraEventDetails;
+
