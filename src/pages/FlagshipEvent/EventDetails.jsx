@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { API_URL } from '../../config/config';
 import { format } from 'date-fns';
@@ -10,7 +10,8 @@ import {
   DialogContentText, DialogActions, Snackbar
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { CalendarToday, School, Delete, Edit } from '@mui/icons-material';
+import { CalendarToday, School, Delete, Edit, Login } from '@mui/icons-material';
+import { AuthContext } from '../../context/AuthContext/AuthContext';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   transition: 'transform 0.3s',
@@ -20,20 +21,67 @@ const StyledCard = styled(Card)(({ theme }) => ({
   }
 }));
 
-console.log('gotcha again and event details')
-
 const EventDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useContext(AuthContext);
   const [conferenceData, setConferenceData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+
+  // TEMPORARY: For testing - set isAuthorized to true if user exists
+  useEffect(() => {
+    if (user) {
+      // For testing purposes, grant authorization to any logged-in user
+      setIsAuthorized(true);
+      console.log('User logged in:', user.email, 'Authorization granted for testing');
+    } else {
+      setIsAuthorized(false);
+    }
+  }, [user]);
+
+  // Your actual authorization check (commented for testing)
+  // useEffect(() => {
+  //   if (user) {
+  //     checkUserAuthorization();
+  //   } else {
+  //     setIsAuthorized(false);
+  //   }
+  // }, [user]);
+
+  const checkUserAuthorization = async () => {
+    try {
+      const idTokenResult = await user.getIdTokenResult();
+      
+      if (idTokenResult.claims.admin === true) {
+        setIsAuthorized(true);
+        return;
+      }
+      
+      const adminEmails = ['admin@gmail.com', 'organizer@example.com']; // Add your email here
+      if (adminEmails.includes(user.email)) {
+        setIsAuthorized(true);
+        return;
+      }
+      
+      if (conferenceData && conferenceData.createdBy === user.uid) {
+        setIsAuthorized(true);
+        return;
+      }
+      
+      setIsAuthorized(false);
+    } catch (error) {
+      console.error('Error checking authorization:', error);
+      setIsAuthorized(false);
+    }
+  };
 
   useEffect(() => {
     fetchEvent();
@@ -42,10 +90,19 @@ const EventDetails = () => {
   const fetchEvent = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/events/${id}`);
+      
+      let token = null;
+      if (user) {
+        token = await user.getIdToken();
+      }
+      
+      const response = await fetch(`${API_URL}/events/${id}`, {
+        headers: token ? {
+          'Authorization': `Bearer ${token}`
+        } : {}
+      });
       
       if (response.status === 404) {
-        // Event doesn't exist - show message and redirect
         setError('Event not found. It may have been deleted.');
         setTimeout(() => {
           navigate('/allconferences', { replace: true });
@@ -65,6 +122,10 @@ const EventDetails = () => {
 
       setConferenceData(data.data);
       setError(null);
+      
+      if (user) {
+        await checkUserAuthorization();
+      }
     } catch (err) {
       console.error('Fetch error:', err);
       setError(err.message);
@@ -78,22 +139,31 @@ const EventDetails = () => {
   };
 
   const handleDeleteConfirm = async () => {
+    if (!user) {
+      setSnackbar({
+        open: true,
+        message: 'You must be logged in to delete events',
+        severity: 'error'
+      });
+      return;
+    }
+
     setDeleting(true);
     try {
+      const token = await user.getIdToken();
+      
       console.log('Attempting to delete event with ID:', id);
       
       const response = await fetch(`${API_URL}/events/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          // Add authorization token if required
-          // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
 
       console.log('Delete response status:', response.status);
       
-      // Handle different response scenarios
       let data;
       let isSuccess = false;
       
@@ -103,15 +173,12 @@ const EventDetails = () => {
         isSuccess = data.success === true;
       } catch (jsonError) {
         console.log('Response is not JSON or empty');
-        // If response is empty but status is 200 or 204, consider it success
         if (response.status === 200 || response.status === 204 || response.ok) {
           isSuccess = true;
         }
       }
       
-      // Check if delete was successful
       if (response.ok && (isSuccess || response.status === 200 || response.status === 204)) {
-        // Success - show message and redirect to allconferences
         setSnackbar({
           open: true,
           message: 'Event deleted successfully! Redirecting to all conferences...',
@@ -120,24 +187,21 @@ const EventDetails = () => {
         
         setDeleteDialogOpen(false);
         
-        // Redirect to /allconferences after a short delay
         setTimeout(() => {
           navigate('/allconferences', { replace: true });
         }, 1500);
       } else {
-        // Handle specific error cases
         let errorMessage = 'Failed to delete event';
         
-        if (response.status === 404) {
+        if (response.status === 401) {
+          errorMessage = 'Session expired. Please log in again.';
+        } else if (response.status === 403) {
+          errorMessage = 'You do not have permission to delete this event. Admin access required.';
+        } else if (response.status === 404) {
           errorMessage = 'Event not found - it may have already been deleted';
-          // Redirect anyway since it's gone
           setTimeout(() => {
             navigate('/allconferences', { replace: true });
           }, 2000);
-        } else if (response.status === 401) {
-          errorMessage = 'You are not authorized to delete this event';
-        } else if (response.status === 403) {
-          errorMessage = 'You do not have permission to delete this event';
         } else if (data?.message) {
           errorMessage = data.message;
         }
@@ -148,11 +212,10 @@ const EventDetails = () => {
     } catch (err) {
       console.error('Delete error details:', err);
       
-      // Check if the error might be due to CORS or network issues
       if (err.message === 'Failed to fetch') {
         setSnackbar({
           open: true,
-          message: 'Network error. Please check if the server is running and CORS is configured.',
+          message: 'Network error. Please check if the server is running.',
           severity: 'error'
         });
       } else {
@@ -164,11 +227,6 @@ const EventDetails = () => {
       }
       
       setDeleteDialogOpen(false);
-      
-      // Refresh the page data to confirm if deletion actually happened
-      setTimeout(() => {
-        fetchEvent();
-      }, 1000);
     } finally {
       setDeleting(false);
     }
@@ -186,8 +244,12 @@ const EventDetails = () => {
     navigate(`/events/edit/${id}`);
   };
 
+  const handleLogin = () => {
+    navigate('/login');
+  };
+
   // Show loading state
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
         <CircularProgress size={60} />
@@ -234,24 +296,47 @@ const EventDetails = () => {
       {/* Action Buttons */}
       <Container maxWidth="lg" sx={{ py: 2 }}>
         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            startIcon={<Edit />}
-            onClick={handleEdit}
-          >
-            Edit Event
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            startIcon={<Delete />}
-            onClick={handleDeleteClick}
-          >
-            Delete Event
-          </Button>
+          {user ? (
+            // Show buttons for any logged-in user (for testing)
+            <>
+              <Button
+                variant="outlined"
+                color="primary"
+                startIcon={<Edit />}
+                onClick={handleEdit}
+              >
+                Edit Event
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                startIcon={<Delete />}
+                onClick={handleDeleteClick}
+              >
+                Delete Event
+              </Button>
+            </>
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<Login />}
+              onClick={handleLogin}
+            >
+              Login to Edit/Delete
+            </Button>
+          )}
         </Box>
       </Container>
+
+      {/* Show user info */}
+      {user && (
+        <Container maxWidth="lg" sx={{ mb: 2 }}>
+          <Alert severity="info">
+            Logged in as: {user.email} - You can edit and delete events (Testing Mode)
+          </Alert>
+        </Container>
+      )}
 
       {/* Responsive Banner */}
       <Box sx={{ 
@@ -272,7 +357,6 @@ const EventDetails = () => {
             objectPosition: 'center center'
           }}
         />
-        {/* Overlay for better text readability */}
         <Box sx={{
           position: 'absolute',
           bottom: 0,
