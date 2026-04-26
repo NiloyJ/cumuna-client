@@ -130,7 +130,7 @@ const Navbar = () => {
                                     <li><NavLink to="/changebanner" className="px-2 py-1">Change Banner</NavLink></li>
                                 </ul>
                             </div>
-                            <Link to="/dashboard" className="hover:text-blue-600 text-sm px-2">Dashboard</Link>
+                            {/* <Link to="/dashboard" className="hover:text-blue-600 text-sm px-2">Dashboard</Link> */}
                             <button
                                 onClick={handleSignOut}
                                 className="btn btn-outline btn-sm border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-3">
