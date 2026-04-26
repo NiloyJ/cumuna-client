@@ -375,8 +375,7 @@ const AddEvents = () => {
                 <div className="flex flex-col items-end">
                     {hasExistingEvent ? (
                         <div className="w-full p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
-                            <p className="font-bold">Event Already Exists</p>
-                            <p>Please delete the current event before creating a new one.</p>
+                            <p className="font-bold">New conferance added</p>
                         </div>
                     ) : (
                         <button
