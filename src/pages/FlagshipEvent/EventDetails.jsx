@@ -20,6 +20,8 @@ const StyledCard = styled(Card)(({ theme }) => ({
   }
 }));
 
+console.log('gotcha again and event details')
+
 const EventDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();

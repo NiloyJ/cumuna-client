@@ -14,6 +14,8 @@ const FlagshipEvent = () => {
     const [error, setError] = useState(null);
     const [searchYear, setSearchYear] = useState('');
 
+    console.log('gotcha')
+
     useEffect(() => {
         const fetchEvents = async () => {
             try {
