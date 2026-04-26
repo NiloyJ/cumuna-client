@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { CalendarToday, School, Delete, Edit, Login } from '@mui/icons-material';
-import { AuthContext } from '../../context/AuthContext/AuthContext';
+import AuthContext from '../../context/AuthContext/AuthContext';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   transition: 'transform 0.3s',
@@ -317,14 +317,7 @@ const EventDetails = () => {
               </Button>
             </>
           ) : (
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<Login />}
-              onClick={handleLogin}
-            >
-              Login to Edit/Delete
-            </Button>
+            <p textAlign='center'>Only Admin allow to modify this part</p>
           )}
         </Box>
       </Container>
