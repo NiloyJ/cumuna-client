@@ -678,7 +678,8 @@ const ShowEvents = () => {
     return (
         <div className="bg-white py-8 px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-8">
-                <span className='text-4xl font-bold'>OUR <span className="text-4xl font-bold text-white bg-gradient-to-r from-blue-600 to-blue-800">EVENTS</span></span>
+                {/* FIXED: "OUR" now in black text */}
+                <span className='text-4xl font-bold text-black'>OUR <span className="text-4xl font-bold text-white bg-gradient-to-r from-blue-600 to-blue-800">EVENTS</span></span>
                 <p className="text-xl text-gray-600 max-w-2xl mx-auto mt-2">
                     Exciting activities and gatherings for our community
                 </p>
